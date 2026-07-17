@@ -23,11 +23,13 @@ All numbers, institutions, balances, and submissions shown in this prototype are
 
 ## Demo accounts
 
-| Role        | Email                         | Password       |
-|-------------|-------------------------------|----------------|
-| Contributor | `contributor@koloqua.test`    | `REDACTED_DEMO_PASSWORD` |
-| Reviewer    | `reviewer@koloqua.test`       | `REDACTED_DEMO_PASSWORD` |
-| Admin       | `admin@koloqua.test`          | `REDACTED_DEMO_PASSWORD` |
+| Role        | Email                       |
+|-------------|-----------------------------|
+| Contributor | `contributor@koloqua.test`  |
+| Reviewer    | `reviewer@koloqua.test`     |
+| Admin       | `admin@koloqua.test`        |
+
+The shared demo password is set via `NEXT_PUBLIC_DEMO_PASSWORD` in `.env.local`. Copy `.env.example` to `.env.local` and set a password before running the app.
 
 ## Run locally
 

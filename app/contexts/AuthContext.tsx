@@ -3,7 +3,6 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { User, Role } from "@/app/lib/types";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
-import { hashPassword } from "@/app/lib/security";
 
 interface AuthContextValue {
   user: User | null;
@@ -21,12 +20,6 @@ const DEMO_USERS: User[] = [
   { id: "u-003", name: "Admin User", email: "admin@koloqua.test", role: "admin", institution: "Koloqua AI", isAdult: true, hasConsented: true, joinedAt: "2025-11-20" },
 ];
 
-const DEMO_PASSWORDS: Record<string, string> = {
-  "contributor@koloqua.test": hashPassword("REDACTED_DEMO_PASSWORD"),
-  "reviewer@koloqua.test": hashPassword("REDACTED_DEMO_PASSWORD"),
-  "admin@koloqua.test": hashPassword("REDACTED_DEMO_PASSWORD"),
-};
-
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { value: stored, setValue: setStored, hydrated } = useLocalStorage<User | null>("koloqua_user_v2", null);
   const [user, setUser] = useState<User | null>(null);
@@ -42,7 +35,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = useCallback((email: string, password: string) => {
     const target = DEMO_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
     if (!target) return { ok: false, error: "No account found for that email." };
-    if (DEMO_PASSWORDS[target.email] !== hashPassword(password)) {
+    const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
+    if (!demoPassword) {
+      return { ok: false, error: "Demo password is not configured." };
+    }
+    if (password !== demoPassword) {
       return { ok: false, error: "Incorrect password." };
     }
     setStored(target);

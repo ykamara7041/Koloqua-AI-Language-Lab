@@ -36,8 +36,10 @@ export function validatePassword(password: string): { ok: boolean; reason?: stri
 
 export function hashPassword(password: string): string {
   // Placeholder for a real PBKDF2/Argon2 hash. Never ship this.
+  // Salt is read from env so it is not hardcoded in source.
+  const salt = process.env.NEXT_PUBLIC_DEMO_SALT || "";
   const encoder = new TextEncoder();
-  const data = encoder.encode(password + "REDACTED_DEMO_SALT");
+  const data = encoder.encode(password + salt);
   return btoa(String.fromCharCode(...new Uint8Array(data.slice(0, 16))));
 }
 

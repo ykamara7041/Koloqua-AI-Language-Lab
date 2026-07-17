@@ -126,7 +126,7 @@ export function Login({ onBack }: LoginProps) {
                 <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm">
                   <p className="font-medium text-amber-800 mb-1">Demo accounts</p>
                   <p className="text-amber-700 text-xs">contributor@koloqua.test · reviewer@koloqua.test · admin@koloqua.test</p>
-                  <p className="text-amber-700 text-xs">Password: REDACTED_DEMO_PASSWORD</p>
+                  <p className="text-amber-700 text-xs">Password is configured in <code>.env.local</code> (see <code>.env.example</code>).</p>
                 </div>
 
                 <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} autoComplete="email" />
