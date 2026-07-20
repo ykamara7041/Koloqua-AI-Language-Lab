@@ -1,6 +1,6 @@
 "use client";
 
-import { Mic, CheckCircle, Users, ShieldCheck, TrendingUp, Clock, ArrowRight } from "lucide-react";
+import { Mic, CheckCircle, Users, ShieldCheck, TrendingUp, Clock, ArrowRight, Target, Headphones, BookOpen } from "lucide-react";
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
 import { Progress } from "@/app/components/ui/Progress";
@@ -8,6 +8,8 @@ import { ChartCard } from "@/app/components/ui/ChartCard";
 import { motion } from "framer-motion";
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, Cell } from "recharts";
 import { PageTitle } from "@/app/components/layout/PageTitle";
+import { contributionGoals } from "@/app/lib/data";
+import type { View } from "@/app/lib/types";
 
 const weeklyData = [
   { day: "Mon", contributions: 45, reviews: 32 },
@@ -37,7 +39,7 @@ const recentActivity = [
 const container = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.08 } } };
 const item = { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } };
 
-export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "review") => void }) {
+export function Overview({ onNavigate }: { onNavigate: (view: View) => void }) {
   return (
     <section className="space-y-8">
       <PageTitle
@@ -49,16 +51,16 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-forest-900 via-forest-800 to-forest-700 p-8 lg:p-12 text-white"
+        className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-charcoal via-charcoal to-charcoal p-8 lg:p-12 text-white"
       >
-        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-forest-400 to-transparent" />
+        <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-terracotta/40 to-transparent" />
         <div className="relative max-w-3xl">
-          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-forest-100 text-xs font-bold uppercase tracking-wider mb-4">
+          <span className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-cream text-xs font-bold uppercase tracking-wider mb-4">
             <span className="w-1.5 h-1.5 rounded-full bg-forest-300 animate-pulse" />
             Live Pilot
           </span>
           <h2 className="text-3xl lg:text-4xl font-bold mb-4 font-display">Preserving Liberia&apos;s voice for the age of AI</h2>
-          <p className="text-forest-100/80 text-lg leading-relaxed mb-8 max-w-2xl">
+          <p className="text-cream/80 text-lg leading-relaxed mb-8 max-w-2xl">
             A community-powered platform to collect, verify, and publish Koloqua language data with dignity and consent.
           </p>
           <div className="flex flex-wrap gap-3">
@@ -67,10 +69,10 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
             </Button>
             <Button
               variant="secondary"
-              onClick={() => onNavigate("review")}
+              onClick={() => onNavigate("validate")}
               className="bg-white/10 text-white border-white/20 hover:bg-white/20 hover:text-white"
             >
-              Review queue
+              Validate clips
             </Button>
           </div>
         </div>
@@ -78,10 +80,10 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
 
       <motion.div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" variants={container} initial="hidden" animate="show">
         {[
-          { label: "Contributions", value: "1,248", sub: "+86 this week", icon: Mic, color: "bg-emerald-50 text-emerald-700", trend: "+12%" },
-          { label: "Approved items", value: "1,062", sub: "Two-review minimum", icon: CheckCircle, color: "bg-blue-50 text-blue-700", trend: "+8%" },
-          { label: "Active speakers", value: "312", sub: "From 4 institutions", icon: Users, color: "bg-violet-50 text-violet-700", trend: "+5%" },
-          { label: "Quality score", value: "87%", sub: "Approval rate", icon: ShieldCheck, color: "bg-amber-50 text-amber-700", trend: "+2%" },
+          { label: "Contributions", value: "1,248", sub: "+86 this week", icon: Mic, color: "text-terracotta/10 text-terracotta", trend: "+12%" },
+          { label: "Approved items", value: "1,062", sub: "Two-review minimum", icon: CheckCircle, color: "bg-cream text-terracotta", trend: "+8%" },
+          { label: "Active speakers", value: "312", sub: "From 4 institutions", icon: Users, color: "bg-cream text-terracotta", trend: "+5%" },
+          { label: "Quality score", value: "87%", sub: "Approval rate", icon: ShieldCheck, color: "bg-cream text-terracotta", trend: "+2%" },
         ].map((s) => {
           const Icon = s.icon;
           return (
@@ -92,15 +94,13 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-slate-500 mb-0.5">{s.label}</p>
-                    <p className="text-2xl font-bold text-slate-900">{s.value}</p>
+                    <p className="text-sm text-charcoal-light mb-0.5">{s.label}</p>
+                    <p className="text-2xl font-bold text-charcoal">{s.value}</p>
+                    <p className="text-xs text-charcoal-light/70 mt-1">{s.sub}</p>
                   </div>
-                </div>
-                <div className="mt-4 flex items-center justify-between">
-                  <span className="text-xs text-slate-500">{s.sub}</span>
-                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-1 rounded-full">
+                  <div className="hidden md:flex items-center gap-1 text-xs font-medium text-terracotta text-terracotta/10 px-2 py-1 rounded-full">
                     <TrendingUp className="w-3 h-3" /> {s.trend}
-                  </span>
+                  </div>
                 </div>
               </Card>
             </motion.div>
@@ -109,52 +109,6 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
       </motion.div>
 
       <motion.div className="grid grid-cols-1 lg:grid-cols-3 gap-5" variants={container} initial="hidden" animate="show">
-        <motion.div className="lg:col-span-2" variants={item}>
-          <Card className="p-6">
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <span className="section-title">Pilot Progress</span>
-                <h3 className="text-lg font-bold text-slate-900 mt-1">Building our first 5,000 sentences</h3>
-              </div>
-              <div className="text-right">
-                <strong className="text-3xl font-bold text-forest-700">25%</strong>
-                <p className="text-xs text-slate-500">1,248 of 5,000</p>
-              </div>
-            </div>
-            <Progress value={1248} max={5000} size="lg" color="forest" />
-            <div className="grid grid-cols-3 gap-4 mt-6">
-              {[
-                { label: "Foundation", value: "1,000", done: true },
-                { label: "Model test", value: "2,500", done: false },
-                { label: "Pilot goal", value: "5,000", done: false },
-              ].map((m) => (
-                <div key={m.label} className={`p-4 rounded-xl border text-center ${m.done ? "bg-forest-50 border-forest-100" : "bg-slate-50 border-slate-100"}`}>
-                  <strong className={`block text-lg font-bold ${m.done ? "text-forest-800" : "text-slate-500"}`}>{m.value}</strong>
-                  <span className="text-xs text-slate-500">{m.label}</span>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </motion.div>
-
-        <motion.div variants={item}>
-          <Card className="p-6 h-full bg-gradient-to-br from-forest-800 to-forest-900 text-white">
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-forest-300">Next Step</span>
-                <h3 className="text-xl font-bold mt-1">12 recordings need review</h3>
-              </div>
-              <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-xl font-bold">12</div>
-            </div>
-            <p className="text-forest-100/80 text-sm mb-6">Independent review keeps the dataset accurate and trustworthy.</p>
-            <Button onClick={() => onNavigate("review")} variant="white" className="w-full">
-              Open review queue
-            </Button>
-          </Card>
-        </motion.div>
-      </motion.div>
-
-      <motion.div className="grid grid-cols-1 lg:grid-cols-2 gap-5" variants={container} initial="hidden" animate="show">
         <motion.div variants={item}>
           <ChartCard title="Weekly activity" subtitle="Contributions vs. reviews">
             <div className="h-64">
@@ -199,6 +153,50 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
             </div>
           </ChartCard>
         </motion.div>
+
+        <motion.div variants={item}>
+          <Card className="p-6 h-full">
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-10 h-10 rounded-xl bg-cream flex items-center justify-center text-terracotta">
+                <Target className="w-5 h-5" />
+              </div>
+              <div>
+                <span className="section-title">Goals</span>
+                <h3 className="text-base font-bold text-charcoal">Your contribution targets</h3>
+              </div>
+            </div>
+            <div className="space-y-5">
+              {contributionGoals.map((goal) => (
+                <div key={goal.id}>
+                  <div className="flex items-center justify-between text-sm mb-1.5">
+                    <span className="font-medium text-charcoal">{goal.label}</span>
+                    <span className="text-xs text-charcoal-light">{goal.deadline}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Progress value={goal.current} max={goal.target} size="sm" color="forest" className="flex-1" />
+                    <span className="text-xs font-semibold text-charcoal-light shrink-0">
+                      {goal.current}/{goal.target} {goal.unit}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 grid grid-cols-2 gap-3">
+              <Button variant="secondary" size="sm" onClick={() => onNavigate("contribute")}>
+                <Mic className="w-4 h-4" /> Record
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => onNavigate("validate")}>
+                <Headphones className="w-4 h-4" /> Validate
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => onNavigate("sentences")}>
+                <BookOpen className="w-4 h-4" /> Sentences
+              </Button>
+              <Button variant="secondary" size="sm" onClick={() => onNavigate("review")}>
+                <CheckCircle className="w-4 h-4" /> Review
+              </Button>
+            </div>
+          </Card>
+        </motion.div>
       </motion.div>
 
       <motion.div className="grid grid-cols-1 lg:grid-cols-3 gap-5" variants={container} initial="hidden" animate="show">
@@ -207,11 +205,11 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
             <span className="section-title">Recent Activity</span>
             <div className="mt-4 space-y-4">
               {recentActivity.map((a, i) => (
-                <div key={i} className="flex items-start gap-3 pb-4 border-b border-slate-100 last:border-0 last:pb-0">
-                  <div className="w-2 h-2 rounded-full bg-forest-500 mt-2 shrink-0" />
+                <div key={i} className="flex items-start gap-3 pb-4 border-b border-cream-dark last:border-0 last:pb-0">
+                  <div className="w-2 h-2 rounded-full bg-cream0 mt-2 shrink-0" />
                   <div className="flex-1">
-                    <p className="text-sm text-slate-900">{a.text}</p>
-                    <span className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
+                    <p className="text-sm text-charcoal">{a.text}</p>
+                    <span className="text-xs text-charcoal-light flex items-center gap-1 mt-0.5">
                       <Clock className="w-3 h-3" /> {a.time}
                     </span>
                   </div>
@@ -224,17 +222,17 @@ export function Overview({ onNavigate }: { onNavigate: (view: "contribute" | "re
         <motion.div className="lg:col-span-2" variants={item}>
           <Card className="p-6">
             <span className="section-title">Built With Purpose</span>
-            <h3 className="text-xl font-bold text-slate-900 mt-1 mb-6 font-display">Technology that respects the people behind the data</h3>
+            <h3 className="text-xl font-bold text-charcoal mt-1 mb-6 font-display">Technology that respects the people behind the data</h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
                 { num: "01", title: "Community ownership", desc: "Liberians shape how the language is recorded, represented and used." },
                 { num: "02", title: "Clear consent", desc: "Every contributor knows what their data supports before submitting." },
                 { num: "03", title: "Verified quality", desc: "Two independent reviewers approve every item used for training." },
               ].map((p) => (
-                <div key={p.num} className="p-5 rounded-xl bg-slate-50 border border-slate-100">
-                  <span className="text-xs font-bold text-forest-600">{p.num}</span>
-                  <h4 className="font-semibold text-slate-900 mt-2 mb-1">{p.title}</h4>
-                  <p className="text-sm text-slate-500 leading-relaxed">{p.desc}</p>
+                <div key={p.num} className="p-5 rounded-xl bg-cream-light border border-cream-dark">
+                  <span className="text-xs font-bold text-terracotta">{p.num}</span>
+                  <h4 className="font-semibold text-charcoal mt-2 mb-1">{p.title}</h4>
+                  <p className="text-sm text-charcoal-light leading-relaxed">{p.desc}</p>
                 </div>
               ))}
             </div>

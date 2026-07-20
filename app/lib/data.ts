@@ -9,6 +9,9 @@ import type {
   DatasetRelease,
   LeaderboardEntry,
   Achievement,
+  SentencePrompt,
+  ValidationClip,
+  ContributionGoal,
 } from "./types";
 
 export const tasks: Task[] = [
@@ -27,6 +30,28 @@ export const reviewItems: ReviewItem[] = [
   { id: "KL-1051", text: "I dey go market.", translation: "I am going to the market.", speaker: "Speaker 021", quality: 71, duration: 6, flags: "silence", submittedAt: "2026-07-15T16:20:00Z", reviews: 1 },
   { id: "KL-1052", text: "Bring watah for me.", translation: "Bring water for me.", speaker: "Speaker 067", quality: 85, duration: 4, flags: "duplicate", submittedAt: "2026-07-15T14:10:00Z", reviews: 1 },
   { id: "KL-1053", text: "I want eat rice.", translation: "I want to eat rice.", speaker: "Speaker 091", quality: 96, duration: 5, flags: null, submittedAt: "2026-07-15T11:30:00Z", reviews: 2 },
+];
+
+export const validationClips: ValidationClip[] = [
+  { id: "KL-1030", text: "Good morning, how was your night?", translation: "Good morning, how was your night?", speaker: "Speaker 014", duration: 3, quality: 94, submittedAt: "2026-07-14T10:00:00Z", yesVotes: 12, noVotes: 0 },
+  { id: "KL-1031", text: "I dey come back small small.", translation: "I will be back shortly.", speaker: "Speaker 055", duration: 4, quality: 89, submittedAt: "2026-07-14T09:30:00Z", yesVotes: 8, noVotes: 1 },
+  { id: "KL-1032", text: "Da pehn them dey play ball.", translation: "The children are playing ball.", speaker: "Speaker 029", duration: 4, quality: 76, submittedAt: "2026-07-14T08:45:00Z", yesVotes: 5, noVotes: 3 },
+  { id: "KL-1033", text: "Please pass me the salt.", translation: "Please pass me the salt.", speaker: "Speaker 081", duration: 3, quality: 98, submittedAt: "2026-07-13T16:20:00Z", yesVotes: 15, noVotes: 1 },
+  { id: "KL-1034", text: "The car break down for road.", translation: "The car broke down on the road.", speaker: "Speaker 043", duration: 5, quality: 82, submittedAt: "2026-07-13T14:10:00Z", yesVotes: 7, noVotes: 2 },
+];
+
+export const sentencePrompts: SentencePrompt[] = [
+  { id: "SP-101", english: "The sun is very hot today.", koloqua: "Sun hot too much today.", category: "Environment", contributor: "James Kollie", submittedAt: "2026-07-18", status: "approved", votes: 8, sourceNote: "Common market phrase" },
+  { id: "SP-102", english: "I want to buy fresh fish.", koloqua: "I want buy fresh fish.", category: "Market", contributor: "Amina Doe", submittedAt: "2026-07-17", status: "pending", votes: 3 },
+  { id: "SP-103", english: "The doctor will see you now.", koloqua: "Doc man go see you now.", category: "Health", contributor: "Sarah Weah", submittedAt: "2026-07-16", status: "pending", votes: 2 },
+  { id: "SP-104", english: "Please help me carry the load.", koloqua: "Please help me carry da load.", category: "Daily life", contributor: "Joseph Tokpah", submittedAt: "2026-07-15", status: "approved", votes: 6 },
+  { id: "SP-105", english: "School will open next week.", koloqua: "School go open next week.", category: "Education", contributor: "Mercy Fallah", submittedAt: "2026-07-14", status: "rejected", votes: 1, sourceNote: "Too close to existing prompt" },
+];
+
+export const contributionGoals: ContributionGoal[] = [
+  { id: "G-001", label: "Daily recordings", current: 8, target: 10, unit: "clips", deadline: "Today" },
+  { id: "G-002", label: "Weekly validations", current: 42, target: 50, unit: "clips", deadline: "This week" },
+  { id: "G-003", label: "Sentence contributions", current: 5, target: 8, unit: "sentences", deadline: "This week" },
 ];
 
 export const institutions: Institution[] = [
@@ -81,11 +106,14 @@ export const leaderboard: LeaderboardEntry[] = [
 ];
 
 export const achievements: Achievement[] = [
-  { id: "ach-1", title: "First Voice", description: "Submit your first contribution", icon: "mic", progress: 1, total: 1, unlockedAt: "2026-07-01" },
-  { id: "ach-2", title: "Quality Keeper", description: "Approve 50 review items", icon: "check", progress: 34, total: 50 },
-  { id: "ach-3", title: "Streak Star", description: "Contribute for 7 days in a row", icon: "flame", progress: 5, total: 7 },
-  { id: "ach-4", title: "Campaign Champion", description: "Complete a full campaign task", icon: "target", progress: 1, total: 1, unlockedAt: "2026-07-05" },
-  { id: "ach-5", title: "Trusted Reviewer", description: "Reach 95% review agreement", icon: "shield", progress: 92, total: 95 },
+  { id: "ach-1", title: "First Voice", description: "Submit your first contribution", icon: "mic", progress: 1, total: 1, unlockedAt: "2026-07-01", rarity: "common" },
+  { id: "ach-2", title: "Quality Keeper", description: "Approve 50 review items", icon: "check", progress: 34, total: 50, rarity: "rare" },
+  { id: "ach-3", title: "Streak Star", description: "Contribute for 7 days in a row", icon: "flame", progress: 5, total: 7, rarity: "common" },
+  { id: "ach-4", title: "Campaign Champion", description: "Complete a full campaign task", icon: "target", progress: 1, total: 1, unlockedAt: "2026-07-05", rarity: "common" },
+  { id: "ach-5", title: "Trusted Reviewer", description: "Reach 95% review agreement", icon: "shield", progress: 92, total: 95, rarity: "rare" },
+  { id: "ach-6", title: "Sentence Builder", description: "Submit 10 approved sentence prompts", icon: "book", progress: 6, total: 10, rarity: "rare" },
+  { id: "ach-7", title: "Community Pillar", description: "Validate 100 clips", icon: "heart", progress: 42, total: 100, rarity: "epic" },
+  { id: "ach-8", title: "Top Contributor", description: "Reach #1 on the monthly leaderboard", icon: "award", progress: 0, total: 1, rarity: "epic" },
 ];
 
 export function canAccess(view: string, role: string): boolean {
@@ -93,6 +121,9 @@ export function canAccess(view: string, role: string): boolean {
     overview: ["guest", "contributor", "reviewer", "admin"],
     contribute: ["contributor", "admin"],
     review: ["reviewer", "admin"],
+    validate: ["contributor", "reviewer", "admin"],
+    sentences: ["contributor", "reviewer", "admin"],
+    achievements: ["contributor", "reviewer", "admin"],
     institutions: ["contributor", "reviewer", "admin"],
     earnings: ["contributor", "reviewer", "admin"],
     campaigns: ["reviewer", "admin", "contributor"],

@@ -1,15 +1,65 @@
 "use client";
 
-import { Database, Download, FileJson, FileSpreadsheet, FileAudio, CheckCircle, Calendar } from "lucide-react";
+import { Database, Download, FileJson, FileSpreadsheet, FileAudio, CheckCircle, Calendar, ShieldAlert, Lock } from "lucide-react";
 import { PageTitle } from "@/app/components/layout/PageTitle";
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
 import { Badge } from "@/app/components/ui/Badge";
 import { datasetReleases } from "@/app/lib/data";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { generateId } from "@/app/lib/security";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 export function Export() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  const logAccess = (action: string, target: string) => {
+    const event = {
+      id: generateId("AUD"),
+      actor: user?.email || "anonymous",
+      action,
+      target,
+      timestamp: new Date().toISOString(),
+      risk: "high" as const,
+    };
+    // In production this would POST to an immutable audit API.
+    if (process.env.NODE_ENV === "development") {
+      console.log("[AUDIT]", event);
+    }
+  };
+
+  if (!isAdmin) {
+    logAccess("dataset_access_denied", "export_page");
+    return (
+      <section className="max-w-3xl">
+        <PageTitle
+          eyebrow="Restricted"
+          title="Dataset export"
+          description="Only project administrators can download or export approved datasets."
+        />
+        <Card className="p-8 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">Access denied</h2>
+          <p className="text-sm text-slate-500 mb-6">
+            Dataset exports contain sensitive voice recordings and governed language data. This action has been logged for review.
+          </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-medium">
+            <Lock className="w-3 h-3" /> Admin-only permission
+          </div>
+        </Card>
+      </section>
+    );
+  }
+
+  const download = (format: string, version: string) => {
+    logAccess(`dataset_download_${format}`, version);
+    toast.success(`${format.toUpperCase()} export for ${version} prepared.`);
+  };
+
   return (
     <section className="max-w-6xl">
       <PageTitle
@@ -58,16 +108,16 @@ export function Export() {
               </div>
 
               <div className="flex flex-wrap gap-2">
-                <Button variant="secondary" size="sm" onClick={() => toast.success(`JSON export for ${release.version} prepared.`)}>
+                <Button variant="secondary" size="sm" onClick={() => download("json", release.version)}>
                   <FileJson className="w-4 h-4" /> JSON
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => toast.success(`CSV export for ${release.version} prepared.`)}>
+                <Button variant="secondary" size="sm" onClick={() => download("csv", release.version)}>
                   <FileSpreadsheet className="w-4 h-4" /> CSV
                 </Button>
-                <Button variant="secondary" size="sm" onClick={() => toast.success(`WAV archive for ${release.version} prepared.`)}>
+                <Button variant="secondary" size="sm" onClick={() => download("wav", release.version)}>
                   <FileAudio className="w-4 h-4" /> WAV
                 </Button>
-                <Button size="sm" onClick={() => toast.success(`Full bundle for ${release.version} prepared.`)}>
+                <Button size="sm" onClick={() => download("bundle", release.version)}>
                   <Download className="w-4 h-4" /> Bundle
                 </Button>
               </div>

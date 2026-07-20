@@ -16,8 +16,8 @@ const FORBIDDEN_PATTERNS = [
 export function sanitizeInput(value: string): string {
   return value
     .replace(/[<>]/g, "")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;")
+    .replace(/"/g, "\u0026quot;")
+    .replace(/'/g, "\u0026#39;")
     .trim();
 }
 
@@ -46,4 +46,46 @@ export function hashPassword(password: string): string {
 export function generateId(prefix: string): string {
   const rand = Math.random().toString(36).slice(2, 8).toUpperCase();
   return `${prefix}-${rand}`;
+}
+
+/**
+ * Generate a demo OTP for the email verification step.
+ * In production this must be replaced by a server-side code sent via SMS/email.
+ */
+export function generateOtp(email: string): string {
+  const demoCode = process.env.NEXT_PUBLIC_DEMO_OTP || "";
+  if (demoCode) return demoCode;
+  // Fallback deterministic demo OTP derived from email so tests are reproducible.
+  const seed = email.toLowerCase().trim();
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash << 5) - hash + seed.charCodeAt(i);
+    hash |= 0;
+  }
+  const code = Math.abs(hash % 1_000_000).toString().padStart(6, "0");
+  return code;
+}
+
+export function formatTime(totalSeconds: number): string {
+  const m = Math.floor(totalSeconds / 60).toString().padStart(2, "0");
+  const s = (totalSeconds % 60).toString().padStart(2, "0");
+  return `${m}:${s}`;
+}
+
+/**
+ * Generate a secure-ish random token for audit/session use.
+ * Production should use crypto.randomUUID or a backend-issued JWT.
+ */
+export function generateSessionToken(): string {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+}
+
+export function maskEmail(email: string): string {
+  const [local, domain] = email.split("@");
+  if (!local || !domain) return email;
+  const masked = local.length > 2 ? `${local.slice(0, 2)}***${local.slice(-1)}` : "***";
+  return `${masked}@${domain}`;
 }

@@ -4,6 +4,8 @@ import {
   LayoutDashboard,
   Mic,
   ClipboardCheck,
+  Headphones,
+  BookOpen,
   School,
   Wallet,
   Target,
@@ -14,6 +16,7 @@ import {
   UserCircle,
   Leaf,
   Trophy,
+  Award,
   LogOut,
 } from "lucide-react";
 import { clsx } from "clsx";
@@ -21,12 +24,22 @@ import type { View } from "@/app/lib/types";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { canAccess } from "@/app/lib/data";
 
-const sections = [
+interface NavItem {
+  id: View;
+  label: string;
+  icon: typeof LayoutDashboard;
+  badge?: string;
+  adminOnly?: boolean;
+}
+
+const sections: { label: string; items: NavItem[] }[] = [
   {
     label: "Platform",
     items: [
       { id: "overview" as View, label: "Overview", icon: LayoutDashboard },
       { id: "contribute" as View, label: "Contribute", icon: Mic, badge: "3" },
+      { id: "validate" as View, label: "Validate", icon: Headphones, badge: "5" },
+      { id: "sentences" as View, label: "Sentences", icon: BookOpen, badge: "2" },
       { id: "review" as View, label: "Review", icon: ClipboardCheck, badge: "12" },
     ],
   },
@@ -36,6 +49,7 @@ const sections = [
       { id: "institutions" as View, label: "Institutions", icon: School },
       { id: "campaigns" as View, label: "Campaigns", icon: Target },
       { id: "leaderboard" as View, label: "Leaderboard", icon: Trophy },
+      { id: "achievements" as View, label: "Achievements", icon: Award },
       { id: "earnings" as View, label: "Earnings", icon: Wallet },
     ],
   },
@@ -43,8 +57,8 @@ const sections = [
     label: "Governance",
     items: [
       { id: "consent" as View, label: "Consent", icon: FileCheck },
-      { id: "audit" as View, label: "Audit log", icon: ScrollText },
-      { id: "export" as View, label: "Dataset", icon: Database },
+      { id: "audit" as View, label: "Audit log", icon: ScrollText, adminOnly: true },
+      { id: "export" as View, label: "Dataset", icon: Database, adminOnly: true },
     ],
   },
   {
@@ -93,7 +107,11 @@ export function Sidebar({
 
         <nav className="flex-1 overflow-y-auto px-3 py-2">
           {sections.map((section) => {
-            const visible = section.items.filter((item) => canAccess(item.id, role));
+            const visible = section.items.filter((item) => {
+              if (!canAccess(item.id, role)) return false;
+              if (item.adminOnly && role !== "admin") return false;
+              return true;
+            });
             if (visible.length === 0) return null;
             return (
               <div key={section.label} className="mb-5">

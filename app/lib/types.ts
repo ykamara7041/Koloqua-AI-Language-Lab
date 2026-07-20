@@ -4,6 +4,9 @@ export type View =
   | "overview"
   | "contribute"
   | "review"
+  | "validate"
+  | "sentences"
+  | "achievements"
   | "institutions"
   | "earnings"
   | "campaigns"
@@ -24,6 +27,7 @@ export interface User {
   hasConsented: boolean;
   joinedAt: string;
   avatar?: string;
+  sessionToken?: string;
 }
 
 export interface Task {
@@ -125,8 +129,52 @@ export interface Achievement {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  icon: "mic" | "check" | "flame" | "target" | "shield" | "star" | "book" | "heart" | "award";
   unlockedAt?: string;
   progress: number;
   total: number;
+  rarity?: "common" | "rare" | "epic";
+}
+
+export interface SentencePrompt {
+  id: string;
+  english: string;
+  koloqua: string;
+  category: string;
+  contributor: string;
+  submittedAt: string;
+  status: "pending" | "approved" | "rejected";
+  votes: number;
+  sourceNote?: string;
+}
+
+export interface ValidationClip {
+  id: string;
+  text: string;
+  translation: string;
+  speaker: string;
+  duration: number;
+  quality: number;
+  submittedAt: string;
+  yesVotes: number;
+  noVotes: number;
+}
+
+export interface ContributionGoal {
+  id: string;
+  label: string;
+  current: number;
+  target: number;
+  unit: string;
+  deadline: string;
+}
+
+export interface PayoutRequest {
+  id: string;
+  userId: string;
+  amount: number;
+  phone: string;
+  status: "pending" | "approved" | "rejected" | "paid";
+  requestedAt: string;
+  processedAt?: string;
 }

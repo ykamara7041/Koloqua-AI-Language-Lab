@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { UserCircle, Mail, Building2, ShieldCheck, Trophy, Mic, CheckCircle } from "lucide-react";
+import { UserCircle, Mail, Building2, ShieldCheck, Trophy, Mic, CheckCircle, Lock, Shield, Clock, Smartphone } from "lucide-react";
 import { PageTitle } from "@/app/components/layout/PageTitle";
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
@@ -9,7 +9,9 @@ import { Input } from "@/app/components/ui/Input";
 import { Badge } from "@/app/components/ui/Badge";
 import { Progress } from "@/app/components/ui/Progress";
 import { useAuth } from "@/app/contexts/AuthContext";
+import { useSecurity } from "@/app/hooks/useSecurity";
 import { achievements } from "@/app/lib/data";
+import { generateSessionToken } from "@/app/lib/security";
 import { toast } from "sonner";
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -21,20 +23,36 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 export function Profile() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const { idleLock, paymentPin, updateIdleLock, updatePaymentPin } = useSecurity();
   const [name, setName] = useState(user?.name || "");
   const [institution, setInstitution] = useState(user?.institution || "");
+  const [pin, setPin] = useState("");
 
   if (!user) {
     return <p className="text-slate-500">Please sign in to view your profile.</p>;
   }
+
+  const savePin = () => {
+    if (!/^\d{4,6}$/.test(pin)) {
+      toast.error("Payment PIN must be 4 to 6 digits.");
+      return;
+    }
+    updatePaymentPin(pin);
+    toast.success("Payment PIN set. It will be required for all withdrawals.");
+    setPin("");
+  };
+
+  const rotateSession = () => {
+    toast.success(`Session refreshed · ${generateSessionToken().slice(0, 8)}...`);
+  };
 
   return (
     <section className="max-w-5xl">
       <PageTitle
         eyebrow="Account"
         title="Your Profile"
-        description="Manage your identity and institution affiliation."
+        description="Manage your identity, institution affiliation, and security preferences."
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -98,6 +116,68 @@ export function Profile() {
             <Button className="mt-5" onClick={() => toast.success("Profile updated.")}>
               Save changes
             </Button>
+          </Card>
+
+          <Card className="p-6">
+            <div className="flex items-center gap-3 mb-5">
+              <Shield className="w-5 h-5 text-forest-600" />
+              <h3 className="font-bold text-lg text-slate-900">Security settings</h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-slate-500" />
+                    <span className="text-sm font-medium text-slate-900">Auto-lock on idle</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={idleLock}
+                    onChange={(e) => updateIdleLock(e.target.checked)}
+                    className="w-5 h-5 accent-forest-600"
+                  />
+                </div>
+                <p className="text-xs text-slate-500 mt-2">Automatically sign out after 10 minutes of inactivity.</p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+                <div className="flex items-start justify-between">
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-slate-500" />
+                    <span className="text-sm font-medium text-slate-900">Email verification</span>
+                  </div>
+                  <input type="checkbox" checked disabled className="w-5 h-5 accent-forest-600" />
+                </div>
+                <p className="text-xs text-slate-500 mt-2">Required for every sign-in.</p>
+              </div>
+            </div>
+
+            <div className="border-t border-slate-100 pt-5">
+              <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3">
+                <Input
+                  label="Payment PIN"
+                  type="password"
+                  inputMode="numeric"
+                  placeholder={paymentPin ? "••••" : "Set a 4-6 digit PIN"}
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  icon={<Lock className="w-4 h-4" />}
+                  className="sm:flex-1"
+                />
+                <Button variant="secondary" onClick={savePin}>Set PIN</Button>
+              </div>
+              <p className="text-xs text-slate-500 mt-2">This PIN is required for every payout request.</p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 mt-6">
+              <Button variant="secondary" size="sm" onClick={rotateSession}>
+                Refresh session
+              </Button>
+              <Button variant="danger" size="sm" onClick={logout}>
+                Sign out everywhere
+              </Button>
+            </div>
           </Card>
 
           <Card className="p-6">

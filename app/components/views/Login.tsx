@@ -6,28 +6,30 @@ import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { Card } from "@/app/components/ui/Card";
 import { useAuth } from "@/app/contexts/AuthContext";
-import { validatePassword } from "@/app/lib/security";
-import { emailSchema } from "@/app/lib/validation";
+import { validatePassword, maskEmail } from "@/app/lib/security";
+import { emailSchema, otpSchema } from "@/app/lib/validation";
 import type { Role } from "@/app/lib/types";
-import { ArrowLeft, Shield } from "lucide-react";
+import { ArrowLeft, Shield, Mail, Lock, KeyRound } from "lucide-react";
+import { toast } from "sonner";
 
 interface LoginProps {
   onBack: () => void;
 }
 
 export function Login({ onBack }: LoginProps) {
-  const { login, register } = useAuth();
-  const [mode, setMode] = useState<"login" | "register">("login");
+  const { login, register, verifyOtp, pendingOtp } = useAuth();
+  const [mode, setMode] = useState<"login" | "register" | "otp">("login");
   const [step, setStep] = useState(1);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [otp, setOtp] = useState("");
   const [role, setRole] = useState<Role>("contributor");
   const [isAdult, setIsAdult] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
-  const handle = (e: React.FormEvent) => {
+  const handleAuth = (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
 
@@ -46,9 +48,45 @@ export function Login({ onBack }: LoginProps) {
     }
 
     setSubmitting(true);
-    const result = mode === "login" ? login(email, password) : register(name, email, password, role, isAdult);
-    if (!result.ok) setErrors({ form: result.error || "Something went wrong." });
+    if (mode === "login") {
+      const result = login(email, password);
+      if (!result.ok) {
+        setErrors({ form: result.error || "Something went wrong." });
+      } else {
+        toast.success(`Verification code sent to ${maskEmail(email)}`);
+        setMode("otp");
+      }
+    } else {
+      const result = register(name, email, password, role, isAdult);
+      if (!result.ok) {
+        setErrors({ form: result.error || "Something went wrong." });
+      } else {
+        toast.success(`Verification code sent to ${maskEmail(email)}`);
+        setMode("otp");
+      }
+    }
     setSubmitting(false);
+  };
+
+  const handleOtp = (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+    const parsed = otpSchema.safeParse({ otp: otp.replace(/\s/g, "") });
+    if (!parsed.success) {
+      setErrors({ otp: parsed.error.issues[0].message });
+      return;
+    }
+    setSubmitting(true);
+    const result = verifyOtp(email, otp);
+    if (!result.ok) {
+      setErrors({ form: result.error || "Verification failed." });
+    }
+    setSubmitting(false);
+  };
+
+  const resend = () => {
+    login(email, password);
+    toast.success(`A new verification code was sent to ${maskEmail(email)}`);
   };
 
   return (
@@ -65,24 +103,67 @@ export function Login({ onBack }: LoginProps) {
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-forest-500 to-forest-700 flex items-center justify-center text-white font-bold text-2xl mx-auto mb-5 shadow-lg">
               K
             </div>
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">{mode === "login" ? "Welcome back" : "Create your account"}</h2>
-            <p className="text-sm text-slate-500">{mode === "login" ? "Sign in to continue your language work." : "Join the pilot as a contributor or reviewer."}</p>
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+              {mode === "otp" ? "Verify your email" : mode === "login" ? "Welcome back" : "Create your account"}
+            </h2>
+            <p className="text-sm text-slate-500">
+              {mode === "otp"
+                ? `Enter the 6-digit code sent to ${maskEmail(pendingOtp?.email || email)}`
+                : mode === "login"
+                ? "Sign in with your email and password."
+                : "Join the pilot as a contributor or reviewer."}
+            </p>
           </div>
 
+          {mode === "otp" && (
+            <form onSubmit={handleOtp} className="space-y-5">
+              <div className="bg-forest-50 border border-forest-100 rounded-xl p-4 text-sm">
+                <div className="flex items-start gap-2">
+                  <Mail className="w-4 h-4 text-forest-600 mt-0.5 shrink-0" />
+                  <p className="text-forest-800">
+                    For this demo, the code is logged to the browser console and is derived from your email.
+                    In production it will be sent by SMS or email.
+                  </p>
+                </div>
+              </div>
+
+              <Input
+                label="Verification code"
+                placeholder="123456"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                error={errors.otp}
+                icon={<KeyRound className="w-4 h-4" />}
+                autoComplete="one-time-code"
+              />
+
+              {errors.form && <p className="text-sm text-coral-600 text-center">{errors.form}</p>}
+
+              <Button type="submit" loading={submitting} className="w-full">
+                Verify and continue
+              </Button>
+              <div className="text-center">
+                <button type="button" onClick={resend} className="text-sm text-forest-700 font-medium hover:underline">
+                  Resend code
+                </button>
+              </div>
+            </form>
+          )}
+
           <AnimatePresence mode="wait">
-            {mode === "register" && step === 1 && (
+            {mode !== "otp" && mode === "register" && step === 1 && (
               <motion.div key="register-step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }}>
                 <div className="space-y-4 mb-6">
                   <Input label="Full name" value={name} onChange={(e) => setName(e.target.value)} error={errors.name} autoComplete="name" />
-                  <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} autoComplete="email" />
-                  <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} error={errors.password} autoComplete="new-password" />
+                  <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} autoComplete="email" icon={<Mail className="w-4 h-4" />} />
+                  <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} error={errors.password} autoComplete="new-password" icon={<Lock className="w-4 h-4" />} />
                 </div>
                 <Button className="w-full" onClick={() => setStep(2)}>Continue</Button>
               </motion.div>
             )}
 
-            {mode === "register" && step === 2 && (
-              <motion.form key="register-step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handle} className="space-y-5">
+            {mode !== "otp" && mode === "register" && step === 2 && (
+              <motion.form key="register-step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handleAuth} className="space-y-5">
                 <div>
                   <label className="label">I want to participate as</label>
                   <div className="grid grid-cols-2 gap-3">
@@ -122,15 +203,15 @@ export function Login({ onBack }: LoginProps) {
             )}
 
             {mode === "login" && (
-              <motion.form key="login" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handle} className="space-y-5">
+              <motion.form key="login" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} onSubmit={handleAuth} className="space-y-5">
                 <div className="bg-amber-50 border border-amber-100 rounded-xl p-4 text-sm">
                   <p className="font-medium text-amber-800 mb-1">Demo accounts</p>
                   <p className="text-amber-700 text-xs">contributor@koloqua.test · reviewer@koloqua.test · admin@koloqua.test</p>
                   <p className="text-amber-700 text-xs">Password is configured in <code>.env.local</code> (see <code>.env.example</code>).</p>
                 </div>
 
-                <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} autoComplete="email" />
-                <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} error={errors.password} autoComplete="current-password" />
+                <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} error={errors.email} autoComplete="email" icon={<Mail className="w-4 h-4" />} />
+                <Input label="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} error={errors.password} autoComplete="current-password" icon={<Lock className="w-4 h-4" />} />
 
                 {errors.form && <p className="text-sm text-coral-600 text-center">{errors.form}</p>}
 
@@ -139,16 +220,18 @@ export function Login({ onBack }: LoginProps) {
             )}
           </AnimatePresence>
 
-          <p className="mt-6 text-center text-sm text-slate-500">
-            {mode === "login" ? "New here? " : "Already have an account? "}
-            <button
-              type="button"
-              onClick={() => { setMode(mode === "login" ? "register" : "login"); setStep(1); }}
-              className="text-forest-700 font-semibold hover:underline"
-            >
-              {mode === "login" ? "Create an account" : "Sign in"}
-            </button>
-          </p>
+          {mode !== "otp" && (
+            <p className="mt-6 text-center text-sm text-slate-500">
+              {mode === "login" ? "New here? " : "Already have an account? "}
+              <button
+                type="button"
+                onClick={() => { setMode(mode === "login" ? "register" : "login"); setStep(1); }}
+                className="text-forest-700 font-semibold hover:underline"
+              >
+                {mode === "login" ? "Create an account" : "Sign in"}
+              </button>
+            </p>
+          )}
         </Card>
       </div>
     </div>

@@ -1,14 +1,58 @@
 "use client";
 
-import { ScrollText, ShieldAlert, AlertTriangle, CheckCircle, Filter, Download } from "lucide-react";
+import { ScrollText, ShieldAlert, AlertTriangle, CheckCircle, Filter, Download, Lock } from "lucide-react";
 import { PageTitle } from "@/app/components/layout/PageTitle";
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
 import { Badge } from "@/app/components/ui/Badge";
 import { auditEvents } from "@/app/lib/data";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { generateId } from "@/app/lib/security";
 import { toast } from "sonner";
 
 export function Audit() {
+  const { user } = useAuth();
+  const isAdmin = user?.role === "admin";
+
+  const logAccess = (action: string, target: string) => {
+    const event = {
+      id: generateId("AUD"),
+      actor: user?.email || "anonymous",
+      action,
+      target,
+      timestamp: new Date().toISOString(),
+      risk: "high" as const,
+    };
+    if (process.env.NODE_ENV === "development") {
+      console.log("[AUDIT]", event);
+    }
+  };
+
+  if (!isAdmin) {
+    logAccess("audit_log_access_denied", "audit_page");
+    return (
+      <section className="max-w-3xl">
+        <PageTitle
+          eyebrow="Restricted"
+          title="Audit log"
+          description="Only project administrators can view the transparency log."
+        />
+        <Card className="p-8 text-center">
+          <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">Access denied</h2>
+          <p className="text-sm text-slate-500 mb-6">
+            The audit log contains sensitive governance information. This action has been logged for review.
+          </p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-medium">
+            <Lock className="w-3 h-3" /> Admin-only permission
+          </div>
+        </Card>
+      </section>
+    );
+  }
+
   return (
     <section className="max-w-6xl">
       <PageTitle

@@ -1,16 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import { Wallet, Mic, ClipboardCheck, TrendingUp, ArrowUpRight, Download } from "lucide-react";
+import { Wallet, Mic, ClipboardCheck, TrendingUp, ArrowUpRight, Download, Lock, ShieldCheck, AlertTriangle, Clock, CheckCircle } from "lucide-react";
 import { PageTitle } from "@/app/components/layout/PageTitle";
 import { Card } from "@/app/components/ui/Card";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { Badge } from "@/app/components/ui/Badge";
 import { ChartCard } from "@/app/components/ui/ChartCard";
+import { useAuth } from "@/app/contexts/AuthContext";
+import { useSecurity } from "@/app/hooks/useSecurity";
 import { ledgerRows } from "@/app/lib/data";
 import { payoutSchema } from "@/app/lib/validation";
 import { toast } from "sonner";
+import type { PayoutRequest } from "@/app/lib/types";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from "recharts";
 
 const monthlyData = [
@@ -23,23 +26,55 @@ const monthlyData = [
   { month: "Jul", earnings: 640 },
 ];
 
+const MIN_BALANCE = 500;
+const MAX_DAILY = 5000;
+const AVAILABLE_BALANCE = 1860;
+
 export function Earnings() {
+  const { user } = useAuth();
+  const { paymentPin } = useSecurity();
   const [amount, setAmount] = useState("");
   const [phone, setPhone] = useState("");
+  const [pin, setPin] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [payouts, setPayouts] = useState<PayoutRequest[]>([
+    { id: "P-001", userId: "u-001", amount: 1200, phone: "+231 77 123 4567", status: "paid", requestedAt: "2026-07-05", processedAt: "2026-07-06" },
+  ]);
 
   const requestPayout = () => {
     setErrors({});
-    const parsed = payoutSchema.safeParse({ amount: Number(amount), phone });
+    const parsed = payoutSchema.safeParse({ amount: Number(amount), phone, pin });
     if (!parsed.success) {
       const mapped: Record<string, string> = {};
       parsed.error.issues.forEach((e) => (mapped[String(e.path[0])] = e.message));
       setErrors(mapped);
       return;
     }
+
+    if (Number(amount) > AVAILABLE_BALANCE) {
+      setErrors({ amount: "Amount exceeds your available balance of L$1,860." });
+      return;
+    }
+
+    if (paymentPin && pin !== paymentPin) {
+      setErrors({ pin: "Incorrect payment PIN." });
+      return;
+    }
+
+    const newPayout: PayoutRequest = {
+      id: `P-${String(payouts.length + 1).padStart(3, "0")}`,
+      userId: user?.id || "unknown",
+      amount: Number(amount),
+      phone,
+      status: "pending",
+      requestedAt: new Date().toISOString().slice(0, 10),
+    };
+    setPayouts((prev) => [newPayout, ...prev]);
+
     toast.success(`Payout request for L$${amount} submitted for review.`);
     setAmount("");
     setPhone("");
+    setPin("");
   };
 
   return (
@@ -55,29 +90,53 @@ export function Earnings() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-forest-300">Available Balance</span>
-              <h2 className="text-5xl font-bold mt-2">L$ 1,860</h2>
+              <h2 className="text-5xl font-bold mt-2">L$ {AVAILABLE_BALANCE.toLocaleString()}</h2>
               <p className="text-forest-200/80 text-sm mt-1">From 84 approved contributions</p>
             </div>
             <div className="flex-1 max-w-md">
-              <div className="flex gap-3 mb-3">
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <Input
                   placeholder="Amount"
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+                  onChange={(e) => setAmount(e.target.value.replace(/\D/g, ""))}
                   error={errors.amount}
-                  className="w-32"
                 />
                 <Input
                   placeholder="Mobile money number"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   error={errors.phone}
-                  className="flex-1"
+                />
+              </div>
+              <div className="mb-3">
+                <Input
+                  placeholder="Payment PIN"
+                  type="password"
+                  inputMode="numeric"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                  error={errors.pin}
+                  icon={<Lock className="w-4 h-4" />}
                 />
               </div>
               <Button onClick={requestPayout} className="w-full bg-white text-forest-800 hover:bg-forest-50">
                 <Wallet className="w-4 h-4" /> Request payout
               </Button>
+            </div>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-white/10 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-forest-300" />
+              <span className="text-forest-200">Min: L${MIN_BALANCE}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Clock className="w-4 h-4 text-forest-300" />
+              <span className="text-forest-200">Daily max: L${MAX_DAILY}</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-forest-300" />
+              <span className="text-forest-200">PIN required</span>
             </div>
           </div>
         </Card>
@@ -134,7 +193,7 @@ export function Earnings() {
         </ChartCard>
       </div>
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden mb-5">
         <div className="p-5 border-b border-slate-100 flex items-center justify-between">
           <div>
             <span className="section-title">Activity</span>
@@ -161,6 +220,28 @@ export function Earnings() {
           <Button variant="ghost" size="sm">
             <Download className="w-4 h-4" /> Export statement
           </Button>
+        </div>
+      </Card>
+
+      <Card className="overflow-hidden">
+        <div className="p-5 border-b border-slate-100">
+          <span className="section-title">Payouts</span>
+          <h3 className="text-base font-bold text-slate-900 mt-1">Withdrawal history</h3>
+        </div>
+        <div className="divide-y divide-slate-100">
+          {payouts.map((p) => (
+            <div className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors" key={p.id}>
+              <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500">
+                {p.status === "paid" ? <CheckCircle className="w-5 h-5 text-emerald-600" /> : <Clock className="w-5 h-5 text-amber-500" />}
+              </div>
+              <div className="flex-1">
+                <strong className="block text-sm text-slate-900">{p.id}</strong>
+                <span className="text-xs text-slate-500">{p.phone} · Requested {p.requestedAt}</span>
+              </div>
+              <Badge tone={p.status === "paid" ? "green" : "gold"} className="capitalize">{p.status}</Badge>
+              <strong className="text-sm min-w-[80px] text-right">L${p.amount.toLocaleString()}</strong>
+            </div>
+          ))}
         </div>
       </Card>
     </section>

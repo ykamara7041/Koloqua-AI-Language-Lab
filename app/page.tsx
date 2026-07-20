@@ -7,6 +7,9 @@ import { Login } from "@/app/components/views/Login";
 import { Overview } from "@/app/components/views/Overview";
 import { Contribute } from "@/app/components/views/Contribute";
 import { Review } from "@/app/components/views/Review";
+import { Validate } from "@/app/components/views/Validate";
+import { Sentences } from "@/app/components/views/Sentences";
+import { Achievements } from "@/app/components/views/Achievements";
 import { Institutions } from "@/app/components/views/Institutions";
 import { Earnings } from "@/app/components/views/Earnings";
 import { Campaigns } from "@/app/components/views/Campaigns";
@@ -48,6 +51,9 @@ export default function Home() {
       {view === "overview" && <Overview onNavigate={(v) => navigate(v)} />}
       {view === "contribute" && <Contribute />}
       {view === "review" && <Review />}
+      {view === "validate" && <Validate />}
+      {view === "sentences" && <Sentences />}
+      {view === "achievements" && <Achievements />}
       {view === "institutions" && <Institutions />}
       {view === "earnings" && <Earnings />}
       {view === "campaigns" && <Campaigns />}
