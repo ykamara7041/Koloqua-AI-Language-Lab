@@ -23,10 +23,13 @@ import {
   Briefcase,
   Quote,
   Star,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { Textarea } from "@/app/components/ui/Textarea";
+import { useTheme } from "@/app/contexts/ThemeContext";
 import { toast } from "sonner";
 
 interface LandingProps {
@@ -36,6 +39,7 @@ interface LandingProps {
 const navLinks = [
   { label: "About", href: "#about" },
   { label: "How it works", href: "#how-it-works" },
+  { label: "Partners", href: "#partners" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -81,7 +85,6 @@ const fadeUp = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: easing } },
 };
 
-
 const staggerContainer = {
   hidden: { opacity: 0 },
   show: {
@@ -101,13 +104,20 @@ const letterReveal = {
 };
 
 export function Landing({ onStart }: LandingProps) {
+  const { resolvedTheme, toggleTheme } = useTheme();
   const [contact, setContact] = useState({ name: "", email: "", subject: "", message: "" });
   const [sending, setSending] = useState(false);
   const [hoveredStep, setHoveredStep] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState("");
 
   const scrollTo = (href: string) => {
     const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    if (el) {
+      setActiveSection(href);
+      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      window.history.replaceState(null, "", href);
+      setTimeout(() => setActiveSection(""), 1000);
+    }
   };
 
   const sendMessage = () => {
@@ -141,9 +151,11 @@ export function Landing({ onStart }: LandingProps) {
     </motion.span>
   );
 
+  const ThemeIcon = resolvedTheme === "dark" ? Sun : Moon;
+
   return (
-    <div className="min-h-screen bg-cream overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-cream/80 backdrop-blur-xl border-b border-cream-dark/50">
+    <div className="min-h-screen bg-cream overflow-x-hidden transition-colors duration-300">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-cream/80 backdrop-blur-xl border-b border-cream-dark/50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <motion.button
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
@@ -170,12 +182,32 @@ export function Landing({ onStart }: LandingProps) {
                 className="relative text-sm font-medium text-charcoal-light hover:text-terracotta transition-colors group"
               >
                 {link.label}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-terracotta transition-all duration-300 group-hover:w-full" />
+                <span className={`absolute -bottom-1 left-0 h-0.5 bg-terracotta transition-all duration-300 ${activeSection === link.href ? "w-full" : "w-0 group-hover:w-full"}`} />
               </motion.button>
             ))}
           </div>
 
-          <Button size="sm" onClick={onStart}>Get started</Button>
+          <div className="flex items-center gap-3">
+            <motion.button
+              onClick={toggleTheme}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              aria-label={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+              className="w-9 h-9 rounded-xl bg-cream-100 border border-cream-dark flex items-center justify-center text-charcoal hover:text-terracotta hover:border-terracotta/30 transition-colors"
+            >
+              <motion.div
+                key={resolvedTheme}
+                initial={{ rotate: -30, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 30, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                <ThemeIcon className="w-4 h-4" />
+              </motion.div>
+            </motion.button>
+
+            <Button size="sm" onClick={onStart}>Get started</Button>
+          </div>
         </div>
       </nav>
 
@@ -202,7 +234,7 @@ export function Landing({ onStart }: LandingProps) {
             >
               <motion.div
                 variants={fadeUp}
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-cream-dark text-terracotta text-sm font-medium mb-6 shadow-soft"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cream-100 border border-cream-dark text-terracotta text-sm font-medium mb-6 shadow-soft"
               >
                 <Image src="/assets/liberia-flag.png" alt="Liberia flag" width={20} height={12} className="rounded-sm" />
                 <span className="w-2 h-2 rounded-full bg-forest-600 animate-pulse" />
@@ -251,12 +283,12 @@ export function Landing({ onStart }: LandingProps) {
                   className="object-cover transition-transform duration-700 hover:scale-105"
                   priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface-dark/40 to-transparent" />
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8, duration: 0.6 }}
-                  className="absolute bottom-4 left-4 right-4 bg-white/95 backdrop-blur rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3"
+                  className="absolute bottom-4 left-4 right-4 bg-cream-100/95 backdrop-blur rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3"
                 >
                   <Image src="/assets/liberia-flag.png" alt="Liberia" width={28} height={17} className="rounded-sm" />
                   <div>
@@ -274,7 +306,7 @@ export function Landing({ onStart }: LandingProps) {
             transition={{ duration: 0.8, delay: 0.6, ease: easing }}
             className="mt-16 max-w-5xl mx-auto"
           >
-            <div className="bg-white rounded-2xl border border-cream-dark shadow-card p-2">
+            <div className="bg-cream-100 rounded-2xl border border-cream-dark shadow-card p-2">
               <div className="bg-cream-light rounded-xl border border-cream-dark p-6 sm:p-10">
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
                   {stats.map((stat, index) => (
@@ -296,7 +328,7 @@ export function Landing({ onStart }: LandingProps) {
         </div>
       </section>
 
-      <section id="about" className="py-20 bg-white">
+      <section id="about" className="py-20 bg-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
@@ -313,7 +345,7 @@ export function Landing({ onStart }: LandingProps) {
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-charcoal/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-surface-dark/20 to-transparent" />
               </motion.div>
             </div>
 
@@ -339,6 +371,7 @@ export function Landing({ onStart }: LandingProps) {
                 </motion.p>
                 <motion.div variants={fadeUp} className="flex flex-wrap gap-3">
                   <Button onClick={onStart}>Become a contributor</Button>
+                  <Button variant="secondary" onClick={() => scrollTo("#partners")}>Meet our partners</Button>
                 </motion.div>
               </motion.div>
             </div>
@@ -375,8 +408,8 @@ export function Landing({ onStart }: LandingProps) {
                 variants={scaleIn}
                 onMouseEnter={() => setHoveredStep(index)}
                 onMouseLeave={() => setHoveredStep(null)}
-                whileHover={{ y: -8, transition: { duration: 0.25 } } }
-                className="h-full bg-white rounded-2xl p-8 border border-cream-dark shadow-soft transition-shadow duration-300 hover:shadow-card"
+                whileHover={{ y: -8, transition: { duration: 0.25 } }}
+                className="h-full bg-cream-100 rounded-2xl p-8 border border-cream-dark shadow-soft transition-shadow duration-300 hover:shadow-card"
               >
                 <motion.div
                   animate={hoveredStep === index ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
@@ -393,7 +426,7 @@ export function Landing({ onStart }: LandingProps) {
         </div>
       </section>
 
-      <section className="py-20 bg-charcoal text-white">
+      <section className="py-20 bg-surface-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
@@ -402,7 +435,8 @@ export function Landing({ onStart }: LandingProps) {
               viewport={{ once: true, margin: "-80px" }}
               variants={staggerContainer}
             >
-              <motion.span variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-cream text-xs font-bold uppercase tracking-wider mb-4">
+              <motion.span variants={fadeUp} className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-cream text-xs font-bold uppercase tracking-wider mb-4"
+              >
                 <Image src="/assets/liberia-flag.png" alt="Liberia flag" width={16} height={10} className="rounded-sm" />
                 Principles
               </motion.span>
@@ -440,7 +474,7 @@ export function Landing({ onStart }: LandingProps) {
         </div>
       </section>
 
-      <section id="testimonials" className="py-20 bg-white">
+      <section id="testimonials" className="py-20 bg-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
@@ -467,7 +501,7 @@ export function Landing({ onStart }: LandingProps) {
               <motion.div
                 key={t.name}
                 variants={fadeUp}
-                whileHover={{ y: -8, transition: { duration: 0.25 } } }
+                whileHover={{ y: -8, transition: { duration: 0.25 } }}
                 className="h-full bg-cream rounded-2xl p-6 border border-cream-dark shadow-soft flex flex-col transition-shadow duration-300 hover:shadow-card"
               >
                 <div className="flex items-center gap-1 mb-4">
@@ -522,8 +556,8 @@ export function Landing({ onStart }: LandingProps) {
               <motion.div
                 key={partner.name}
                 variants={scaleIn}
-                whileHover={{ y: -6, borderColor: "rgba(154, 52, 18, 0.35)", transition: { duration: 0.25 } } }
-                className="bg-white rounded-2xl p-6 border border-cream-dark shadow-soft flex items-center gap-4 transition-shadow duration-300 hover:shadow-card"
+                whileHover={{ y: -6, borderColor: "rgba(154, 52, 18, 0.35)", transition: { duration: 0.25 } }}
+                className="bg-cream-100 rounded-2xl p-6 border border-cream-dark shadow-soft flex items-center gap-4 transition-shadow duration-300 hover:shadow-card"
               >
                 <motion.div
                   whileHover={{ rotate: 5, scale: 1.05 }}
@@ -541,7 +575,7 @@ export function Landing({ onStart }: LandingProps) {
         </div>
       </section>
 
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <motion.div
@@ -635,7 +669,7 @@ export function Landing({ onStart }: LandingProps) {
         </div>
       </section>
 
-      <footer className="bg-charcoal text-cream/80 py-12">
+      <footer className="bg-surface-dark text-cream/80 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="md:col-span-2">
@@ -654,6 +688,7 @@ export function Landing({ onStart }: LandingProps) {
               <ul className="space-y-2 text-sm">
                 <li><button onClick={() => scrollTo("#about")} className="hover:text-white transition-colors">About us</button></li>
                 <li><button onClick={() => scrollTo("#how-it-works")} className="hover:text-white transition-colors">How it works</button></li>
+                <li><button onClick={() => scrollTo("#partners")} className="hover:text-white transition-colors">Partners</button></li>
                 <li><button onClick={() => scrollTo("#contact")} className="hover:text-white transition-colors">Contact</button></li>
               </ul>
             </div>

@@ -4,15 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bg-page: #FFFBEB;
+  --bg-card: #FFFFFF;
+  --bg-invert: #0F172A;
+  --bg-subtle: #FFFBF2;
+  --border: #FAEEE1;
+  --text: #0F172A;
+  --text-muted: #64748B;
+  --accent: #9A3412;
+  --accent-light: #C2410C;
+  --accent-dark: #7C2D12;
+  --success: #059669;
+  --gold: #FBBF24;
+}
+
+.dark {
+  --bg-page: #0B1120;
+  --bg-card: #1E293B;
+  --bg-invert: #020617;
+  --bg-subtle: #1E293B;
+  --border: #334155;
+  --text: #F8FAFC;
+  --text-muted: #94A3B8;
+  --accent: #FB923C;
+  --accent-light: #FDBA74;
+  --accent-dark: #EA580C;
+  --success: #34D399;
+  --gold: #FBBF24;
+}
+
 @layer base {
   html {
     @apply scroll-smooth antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   body {
     @apply bg-cream text-charcoal font-sans;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   * {
@@ -38,7 +70,7 @@
   }
 
   .btn-secondary {
-    @apply btn bg-white text-charcoal border border-cream-dark hover:border-terracotta hover:text-terracotta hover:bg-cream-light;
+    @apply btn bg-cream-100 text-charcoal border border-cream-dark hover:border-terracotta hover:text-terracotta hover:bg-cream-light;
   }
 
   .btn-ghost {
@@ -50,7 +82,7 @@
   }
 
   .card {
-    @apply bg-white rounded-2xl border border-cream-dark shadow-soft;
+    @apply bg-cream-100 rounded-2xl border border-cream-dark shadow-soft;
   }
 
   .card-hover {
@@ -58,7 +90,7 @@
   }
 
   .input {
-    @apply w-full h-12 px-4 rounded-xl border border-cream-dark bg-white text-charcoal text-sm placeholder:text-charcoal-light focus:outline-none focus:border-terracotta focus:ring-4 focus:ring-terracotta/10 transition-all;
+    @apply w-full h-12 px-4 rounded-xl border border-cream-dark bg-cream-100 text-charcoal text-sm placeholder:text-charcoal-light focus:outline-none focus:border-terracotta transition-all;
   }
 
   .label {

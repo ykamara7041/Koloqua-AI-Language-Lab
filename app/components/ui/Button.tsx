@@ -25,7 +25,7 @@ export function Button({
     secondary: "btn-secondary",
     ghost: "btn-ghost",
     danger: "btn-danger",
-    white: "btn bg-white text-forest-800 hover:bg-slate-50 border border-slate-200",
+    white: "btn bg-cream-100 text-charcoal hover:bg-cream-light border border-cream-dark",
   };
 
   const sizes = {

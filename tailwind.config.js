@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,20 +9,23 @@ module.exports = {
     extend: {
       colors: {
         cream: {
-          DEFAULT: "#FFFBEB",
-          50: "#FFFBEB",
-          100: "#FEF3C7",
-          light: "#FFFBF2",
-          dark: "#FAEEE1",
+          DEFAULT: "var(--bg-page)",
+          50: "var(--bg-page)",
+          100: "var(--bg-card)",
+          light: "var(--bg-subtle)",
+          dark: "var(--border)",
         },
         charcoal: {
-          DEFAULT: "#0F172A",
-          light: "#64748B",
+          DEFAULT: "var(--text)",
+          light: "var(--text-muted)",
+        },
+        surface: {
+          dark: "var(--bg-invert)",
         },
         terracotta: {
-          DEFAULT: "#9A3412",
-          dark: "#7C2D12",
-          light: "#C2410C",
+          DEFAULT: "var(--accent)",
+          dark: "var(--accent-dark)",
+          light: "var(--accent-light)",
         },
         forest: {
           50: "#ECFDF5",
@@ -30,7 +34,7 @@ module.exports = {
           300: "#6EE7B7",
           400: "#34D399",
           500: "#10B981",
-          600: "#059669",
+          600: "var(--success)",
           700: "#047857",
           800: "#065F46",
           900: "#064E3B",
@@ -41,7 +45,7 @@ module.exports = {
           100: "#FEF3C7",
           200: "#FDE68A",
           300: "#FCD34D",
-          400: "#FBBF24",
+          400: "var(--gold)",
           500: "#F59E0B",
           600: "#D97706",
           700: "#B45309",
@@ -84,6 +88,9 @@ module.exports = {
           "0%": { opacity: "0", transform: "translateY(12px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+      },
+      transitionProperty: {
+        theme: "background-color, border-color, color, fill, stroke",
       },
     },
   },
