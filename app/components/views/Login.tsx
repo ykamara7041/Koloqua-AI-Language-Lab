@@ -191,7 +191,40 @@ export function Login({ onBack }: LoginProps) {
       </div>
 
       <div className="flex-1 flex flex-col lg:flex-row min-h-screen">
-        {/* Left side - auth form */}
+        {/* Left side - visual panel */}
+        <div className="hidden lg:flex lg:w-1/2 relative bg-surface-dark overflow-hidden">
+          <Image
+            src="/assets/community-voice.jpg"
+            alt="Liberian community voices"
+            fill
+            className="object-cover opacity-80"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/40 to-transparent" />
+
+          <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7, ease: easing }}
+            >
+              <Quote className="w-10 h-10 text-terracotta/60 mb-4" />
+              <p className="text-xl sm:text-2xl font-medium leading-relaxed mb-6 font-display">
+                Every Koloqua sentence, every recorded voice, is a step toward preserving Liberia&apos;s language for the next generation.
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-terracotta flex items-center justify-center text-white font-bold text-sm">S.W.</div>
+                <div>
+                  <p className="text-sm font-bold">Sarah Weah</p>
+                  <p className="text-xs text-white/70">Contributor, Monrovia</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+    </div>
+        {/* Right side - auth form */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-24 lg:pt-16">
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -507,41 +540,8 @@ export function Login({ onBack }: LoginProps) {
               )}
             </div>
           </motion.div>
-        </div>
-
-        {/* Right side - visual panel */}
-        <div className="hidden lg:flex lg:w-1/2 relative bg-surface-dark overflow-hidden">
-          <Image
-            src="/assets/community-voice.jpg"
-            alt="Liberian community voices"
-            fill
-            className="object-cover opacity-80"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/40 to-transparent" />
-
-          <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: 0.7, ease: easing }}
-            >
-              <Quote className="w-10 h-10 text-terracotta/60 mb-4" />
-              <p className="text-xl sm:text-2xl font-medium leading-relaxed mb-6 font-display">
-                Every Koloqua sentence, every recorded voice, is a step toward preserving Liberia&apos;s language for the next generation.
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-terracotta flex items-center justify-center text-white font-bold text-sm">S.W.</div>
-                <div>
-                  <p className="text-sm font-bold">Sarah Weah</p>
-                  <p className="text-xs text-white/70">Contributor, Monrovia</p>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
       </div>
     </div>
+
   );
 }
