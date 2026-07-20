@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { useAuth } from "@/app/contexts/AuthContext";
@@ -22,6 +23,7 @@ import {
   Chrome,
   Eye,
   EyeOff,
+  Quote,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -188,321 +190,357 @@ export function Login({ onBack }: LoginProps) {
         </button>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-8 pt-24">
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.5, ease: easing }}
-          className="w-full max-w-md"
-        >
-          <div className="bg-cream-100 rounded-3xl border border-cream-dark shadow-elevated p-8 sm:p-10">
-            <div className="text-center mb-8">
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.1, duration: 0.4, ease: easing }}
-                className="w-16 h-16 rounded-2xl bg-gradient-to-br from-terracotta to-terracotta-light flex items-center justify-center text-white font-bold text-2xl mx-auto mb-5 shadow-lg"
-              >
-                K
-              </motion.div>
-              <motion.h2
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
-                className="text-2xl sm:text-3xl font-bold text-charcoal mb-2 font-display"
-              >
-                {mode === "otp" ? "Check your email" : mode === "login" ? "Welcome back" : "Create account"}
-              </motion.h2>
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.25, duration: 0.4 }}
-                className="text-sm text-charcoal-light"
-              >
-                {mode === "otp"
-                  ? `Enter the 6-digit code sent to ${otpSentTo || email}`
-                  : mode === "login"
-                  ? "Sign in to continue building Liberia's voice dataset."
-                  : "Join thousands of contributors preserving Koloqua."}
-              </motion.p>
-            </div>
-
-            <AnimatePresence mode="wait">
-              {mode === "otp" ? (
-                <motion.form
-                  key="otp"
-                  variants={slide}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  onSubmit={handleOtp}
-                  className="space-y-6"
+      <div className="flex-1 flex flex-col lg:flex-row min-h-screen">
+        {/* Left side - auth form */}
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-24 lg:pt-16">
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.5, ease: easing }}
+            className="w-full max-w-md"
+          >
+            <div className="bg-cream-100 rounded-3xl border border-cream-dark shadow-elevated p-8 sm:p-10">
+              <div className="text-center mb-8">
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.1, duration: 0.4, ease: easing }}
+                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-terracotta to-terracotta-light flex items-center justify-center text-white font-bold text-2xl mx-auto mb-5 shadow-lg"
                 >
-                  <div className="flex justify-center gap-3">
-                    {otp.map((digit, i) => (
-                      <input
-                        key={i}
-                        id={`otp-${i}`}
-                        ref={(el) => { if (el) otpRefs.current[i] = el; }}
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={1}
-                        value={digit}
-                        onChange={(e) => handleOtpChange(i, e.target.value)}
-                        onKeyDown={(e) => handleOtpKeyDown(i, e)}
-                        onPaste={handleOtpPaste}
-                        className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border border-cream-dark bg-cream text-charcoal focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 outline-none transition-all"
-                      />
-                    ))}
-                  </div>
-
-                  {errors.otp && <p className="text-xs text-coral-600 text-center font-medium">{errors.otp}</p>}
-                  {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
-
-                  <Button type="submit" loading={submitting} className="w-full">
-                    <KeyRound className="w-4 h-4" /> Verify code
-                  </Button>
-
-                  <p className="text-center text-sm text-charcoal-light">
-                    Didn&apos;t receive it?{" "}
-                    <button type="button" onClick={resend} className="text-terracotta font-semibold hover:underline">
-                      Resend code
-                    </button>
-                  </p>
-                </motion.form>
-              ) : mode === "register" ? (
-                <motion.div key="register" variants={slide} initial="initial" animate="animate" exit="exit" className="space-y-5"
+                  K
+                </motion.div>
+                <motion.h2
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                  className="text-2xl sm:text-3xl font-bold text-charcoal mb-2 font-display"
                 >
-                  {step === 1 && (
-                    <form
-                      onSubmit={(e) => {
-                        e.preventDefault();
-                        setErrors({});
-                        const next: Record<string, string> = {};
-                        if (name.trim().length < 2) next.name = "Enter your full name.";
-                        const emailResult = emailSchema.safeParse(email);
-                        if (!emailResult.success) next.email = emailResult.error.issues[0].message;
-                        if (Object.keys(next).length > 0) {
-                          setErrors(next);
-                          return;
-                        }
-                        setStep(2);
-                      }}
-                      className="space-y-5"
-                    >
-                      <Input
-                        label="Full name"
-                        placeholder="e.g. Amina Doe"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        error={errors.name}
-                        autoComplete="name"
-                        icon={<User className="w-4 h-4" />}
-                      />
-                      <Input
-                        label="Email address"
-                        type="email"
-                        placeholder="you@example.com"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        error={errors.email}
-                        autoComplete="email"
-                        icon={<Mail className="w-4 h-4" />}
-                      />
+                  {mode === "otp" ? "Check your email" : mode === "login" ? "Welcome back" : "Create account"}
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.25, duration: 0.4 }}
+                  className="text-sm text-charcoal-light"
+                >
+                  {mode === "otp"
+                    ? `Enter the 6-digit code sent to ${otpSentTo || email}`
+                    : mode === "login"
+                    ? "Sign in to continue building Liberia's voice dataset."
+                    : "Join thousands of contributors preserving Koloqua."}
+                </motion.p>
+              </div>
 
-                      <div className="bg-cream border border-cream-dark rounded-xl p-4"
+              <AnimatePresence mode="wait">
+                {mode === "otp" ? (
+                  <motion.form
+                    key="otp"
+                    variants={slide}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    onSubmit={handleOtp}
+                    className="space-y-6"
+                  >
+                    <div className="flex justify-center gap-3">
+                      {otp.map((digit, i) => (
+                        <input
+                          key={i}
+                          id={`otp-${i}`}
+                          ref={(el) => { if (el) otpRefs.current[i] = el; }}
+                          type="text"
+                          inputMode="numeric"
+                          maxLength={1}
+                          value={digit}
+                          onChange={(e) => handleOtpChange(i, e.target.value)}
+                          onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                          onPaste={handleOtpPaste}
+                          className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border border-cream-dark bg-cream text-charcoal focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 outline-none transition-all"
+                        />
+                      ))}
+                    </div>
+
+                    {errors.otp && <p className="text-xs text-coral-600 text-center font-medium">{errors.otp}</p>}
+                    {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
+
+                    <Button type="submit" loading={submitting} className="w-full">
+                      <KeyRound className="w-4 h-4" /> Verify code
+                    </Button>
+
+                    <p className="text-center text-sm text-charcoal-light">
+                      Didn&apos;t receive it?{" "}
+                      <button type="button" onClick={resend} className="text-terracotta font-semibold hover:underline">
+                        Resend code
+                      </button>
+                    </p>
+                  </motion.form>
+                ) : mode === "register" ? (
+                  <motion.div key="register" variants={slide} initial="initial" animate="animate" exit="exit" className="space-y-5"
+                  >
+                    {step === 1 && (
+                      <form
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          setErrors({});
+                          const next: Record<string, string> = {};
+                          if (name.trim().length < 2) next.name = "Enter your full name.";
+                          const emailResult = emailSchema.safeParse(email);
+                          if (!emailResult.success) next.email = emailResult.error.issues[0].message;
+                          if (Object.keys(next).length > 0) {
+                            setErrors(next);
+                            return;
+                          }
+                          setStep(2);
+                        }}
+                        className="space-y-5"
                       >
-                        <div className="flex items-start gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-terracotta/10 flex items-center justify-center text-terracotta shrink-0">
-                            <Sparkles className="w-4 h-4" />
+                        <Input
+                          label="Full name"
+                          placeholder="e.g. Amina Doe"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          error={errors.name}
+                          autoComplete="name"
+                          icon={<User className="w-4 h-4" />}
+                        />
+                        <Input
+                          label="Email address"
+                          type="email"
+                          placeholder="you@example.com"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          error={errors.email}
+                          autoComplete="email"
+                          icon={<Mail className="w-4 h-4" />}
+                        />
+
+                        <div className="bg-cream border border-cream-dark rounded-xl p-4"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="w-8 h-8 rounded-lg bg-terracotta/10 flex items-center justify-center text-terracotta shrink-0">
+                              <Sparkles className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-charcoal">Why join?</p>
+                              <p className="text-xs text-charcoal-light">
+                                Record or review Koloqua speech, earn rewards, and help build Liberia&apos;s first community-owned language dataset.
+                              </p>
+                            </div>
                           </div>
+                        </div>
+
+                        <Button type="submit" className="w-full">
+                          Continue <ArrowRight className="w-4 h-4" />
+                        </Button>
+                      </form>
+                    )}
+
+                    {step === 2 && (
+                      <form onSubmit={handleAuth} className="space-y-5">
+                        <div className="space-y-3">
+                          <label className="label">I want to participate as</label>
+                          <div className="grid grid-cols-2 gap-3">
+                            {roles.map((r) => (
+                              <button
+                                key={r.value}
+                                type="button"
+                                onClick={() => setRole(r.value)}
+                                className={`relative p-4 rounded-xl border-2 text-left transition-all ${
+                                  role === r.value
+                                    ? "border-terracotta bg-terracotta/5"
+                                    : "border-cream-dark hover:border-terracotta/30"
+                                }`}
+                              >
+                                <span className="flex items-center justify-between">
+                                  <strong className="block text-sm text-charcoal">{r.label}</strong>
+                                  {role === r.value && <Check className="w-4 h-4 text-terracotta" />}
+                                </span>
+                                <span className="text-xs text-charcoal-light">{r.desc}</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="relative">
+                          <Input
+                            label="Create password"
+                            type={showPassword ? "text" : "password"}
+                            placeholder="At least 10 characters"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            error={errors.password}
+                            autoComplete="new-password"
+                            icon={<Lock className="w-4 h-4" />}
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword((v) => !v)}
+                            className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+
+                        <label className="flex items-start gap-3 p-4 rounded-xl border border-cream-dark cursor-pointer hover:border-terracotta/30 transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={isAdult}
+                            onChange={(e) => setIsAdult(e.target.checked)}
+                            className="w-5 h-5 accent-terracotta mt-0.5 rounded"
+                          />
                           <div>
-                            <p className="text-sm font-medium text-charcoal">Why join?</p>
+                            <strong className="block text-sm text-charcoal">I am 18 or older</strong>
+                            <span className="text-xs text-charcoal-light">If not, a parent or guardian must provide consent.</span>
+                          </div>
+                        </label>
+
+                        <div className="bg-terracotta/5 border border-terracotta/10 rounded-xl p-4"
+                        >
+                          <div className="flex items-start gap-2">
+                            <Shield className="w-4 h-4 text-terracotta mt-0.5 shrink-0" />
                             <p className="text-xs text-charcoal-light">
-                              Record or review Koloqua speech, earn rewards, and help build Liberia&apos;s first community-owned language dataset.
+                              Your data is protected. We never share identity information without explicit consent.
                             </p>
                           </div>
                         </div>
-                      </div>
 
-                      <Button type="submit" className="w-full">
-                        Continue <ArrowRight className="w-4 h-4" />
-                      </Button>
-                    </form>
-                  )}
+                        {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
 
-                  {step === 2 && (
-                    <form onSubmit={handleAuth} className="space-y-5">
-                      <div className="space-y-3">
-                        <label className="label">I want to participate as</label>
-                        <div className="grid grid-cols-2 gap-3">
-                          {roles.map((r) => (
-                            <button
-                              key={r.value}
-                              type="button"
-                              onClick={() => setRole(r.value)}
-                              className={`relative p-4 rounded-xl border-2 text-left transition-all ${
-                                role === r.value
-                                  ? "border-terracotta bg-terracotta/5"
-                                  : "border-cream-dark hover:border-terracotta/30"
-                              }`}
-                            >
-                              <span className="flex items-center justify-between">
-                                <strong className="block text-sm text-charcoal">{r.label}</strong>
-                                {role === r.value && <Check className="w-4 h-4 text-terracotta" />}
-                              </span>
-                              <span className="text-xs text-charcoal-light">{r.desc}</span>
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="relative">
-                        <Input
-                          label="Create password"
-                          type={showPassword ? "text" : "password"}
-                          placeholder="At least 10 characters"
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          error={errors.password}
-                          autoComplete="new-password"
-                          icon={<Lock className="w-4 h-4" />}
-                          className="pr-10"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => setShowPassword((v) => !v)}
-                          className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                        <div className="flex gap-3"
                         >
-                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                        </button>
-                      </div>
-
-                      <label className="flex items-start gap-3 p-4 rounded-xl border border-cream-dark cursor-pointer hover:border-terracotta/30 transition-colors"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={isAdult}
-                          onChange={(e) => setIsAdult(e.target.checked)}
-                          className="w-5 h-5 accent-terracotta mt-0.5 rounded"
-                        />
-                        <div>
-                          <strong className="block text-sm text-charcoal">I am 18 or older</strong>
-                          <span className="text-xs text-charcoal-light">If not, a parent or guardian must provide consent.</span>
+                          <Button variant="secondary" className="flex-1" onClick={() => setStep(1)}>Back</Button>
+                          <Button type="submit" loading={submitting} className="flex-1">Create account</Button>
                         </div>
-                      </label>
+                      </form>
+                    )}
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="login"
+                    variants={slide}
+                    initial="initial"
+                    animate="animate"
+                    exit="exit"
+                    onSubmit={handleAuth}
+                    className="space-y-5"
+                  >
+                    <div className="grid grid-cols-2 gap-3">
+                      <SocialButton icon={Chrome} label="Google" />
+                      <SocialButton icon={Github} label="GitHub" />
+                    </div>
 
-                      <div className="bg-terracotta/5 border border-terracotta/10 rounded-xl p-4"
-                      >
-                        <div className="flex items-start gap-2">
-                          <Shield className="w-4 h-4 text-terracotta mt-0.5 shrink-0" />
-                          <p className="text-xs text-charcoal-light">
-                            Your data is protected. We never share identity information without explicit consent.
-                          </p>
-                        </div>
-                      </div>
+                    {divider}
 
-                      {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
-
-                      <div className="flex gap-3"
-                      >
-                        <Button variant="secondary" className="flex-1" onClick={() => setStep(1)}>Back</Button>
-                        <Button type="submit" loading={submitting} className="flex-1">Create account</Button>
-                      </div>
-                    </form>
-                  )}
-                </motion.div>
-              ) : (
-                <motion.form
-                  key="login"
-                  variants={slide}
-                  initial="initial"
-                  animate="animate"
-                  exit="exit"
-                  onSubmit={handleAuth}
-                  className="space-y-5"
-                >
-                  <div className="grid grid-cols-2 gap-3">
-                    <SocialButton icon={Chrome} label="Google" />
-                    <SocialButton icon={Github} label="GitHub" />
-                  </div>
-
-                  {divider}
-
-                  <Input
-                    label="Email address"
-                    type="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    error={errors.email}
-                    autoComplete="email"
-                    icon={<Mail className="w-4 h-4" />}
-                  />
-
-                  <div className="relative">
                     <Input
-                      label="Password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Enter your password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      error={errors.password}
-                      autoComplete="current-password"
-                      icon={<Lock className="w-4 h-4" />}
-                      className="pr-10"
+                      label="Email address"
+                      type="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      error={errors.email}
+                      autoComplete="email"
+                      icon={<Mail className="w-4 h-4" />}
                     />
+
+                    <div className="relative">
+                      <Input
+                        label="Password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        error={errors.password}
+                        autoComplete="current-password"
+                        icon={<Lock className="w-4 h-4" />}
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword((v) => !v)}
+                        className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <button type="button" className="text-xs text-terracotta font-medium hover:underline">
+                        Forgot password?
+                      </button>
+                    </div>
+
+                    {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
+
+                    <Button type="submit" loading={submitting} className="w-full">
+                      Sign in <ArrowRight className="w-4 h-4" />
+                    </Button>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+              {mode !== "otp" && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="mt-8 space-y-4"
+                >
+                  {mode === "register" && (
+                    <p className="text-center text-xs text-charcoal-light">
+                      By creating an account, you agree to our data consent and community guidelines.
+                    </p>
+                  )}
+                  <p className="text-center text-sm text-charcoal-light"
+                  >
+                    {mode === "login" ? "New to Koloqua AI? " : "Already have an account? "}
                     <button
                       type="button"
-                      onClick={() => setShowPassword((v) => !v)}
-                      className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                      onClick={() => switchMode(mode === "login" ? "register" : "login")}
+                      className="text-terracotta font-semibold hover:underline"
                     >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {mode === "login" ? "Create an account" : "Sign in"}
                     </button>
-                  </div>
-
-                  <div className="flex justify-end">
-                    <button type="button" className="text-xs text-terracotta font-medium hover:underline">
-                      Forgot password?
-                    </button>
-                  </div>
-
-                  {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
-
-                  <Button type="submit" loading={submitting} className="w-full">
-                    Sign in <ArrowRight className="w-4 h-4" />
-                  </Button>
-                </motion.form>
-              )}
-            </AnimatePresence>
-
-            {mode !== "otp" && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.4 }}
-                className="mt-8 space-y-4"
-              >
-                {mode === "register" && (
-                  <p className="text-center text-xs text-charcoal-light">
-                    By creating an account, you agree to our data consent and community guidelines.
                   </p>
-                )}
-                <p className="text-center text-sm text-charcoal-light"
-                >
-                  {mode === "login" ? "New to Koloqua AI? " : "Already have an account? "}
-                  <button
-                    type="button"
-                    onClick={() => switchMode(mode === "login" ? "register" : "login")}
-                    className="text-terracotta font-semibold hover:underline"
-                  >
-                    {mode === "login" ? "Create an account" : "Sign in"}
-                  </button>
-                </p>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Right side - visual panel */}
+        <div className="hidden lg:flex lg:w-1/2 relative bg-surface-dark overflow-hidden">
+          <Image
+            src="/assets/community-voice.jpg"
+            alt="Liberian community voices"
+            fill
+            className="object-cover opacity-80"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-surface-dark via-surface-dark/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-surface-dark/40 to-transparent" />
+
+          <div className="absolute bottom-0 left-0 right-0 p-12 text-white">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.7, ease: easing }}
+            >
+              <Quote className="w-10 h-10 text-terracotta/60 mb-4" />
+              <p className="text-xl sm:text-2xl font-medium leading-relaxed mb-6 font-display">
+                Every Koloqua sentence, every recorded voice, is a step toward preserving Liberia&apos;s language for the next generation.
+              </p>
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-terracotta flex items-center justify-center text-white font-bold text-sm">S.W.</div>
+                <div>
+                  <p className="text-sm font-bold">Sarah Weah</p>
+                  <p className="text-xs text-white/70">Contributor, Monrovia</p>
+                </div>
+              </div>
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
