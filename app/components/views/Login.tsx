@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
@@ -18,6 +18,10 @@ import {
   Check,
   ArrowRight,
   Sparkles,
+  Github,
+  Chrome,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -38,6 +42,18 @@ const roles: { value: Role; label: string; desc: string }[] = [
   { value: "reviewer", label: "Reviewer", desc: "Validate quality" },
 ];
 
+function SocialButton({ icon: Icon, label }: { icon: typeof Chrome; label: string }) {
+  return (
+    <button
+      type="button"
+      className="w-full flex items-center justify-center gap-2 px-4 h-11 rounded-xl border border-cream-dark bg-cream-100 text-charcoal text-sm font-medium hover:border-terracotta/30 hover:bg-cream-light transition-all"
+    >
+      <Icon className="w-4 h-4" />
+      {label}
+    </button>
+  );
+}
+
 export function Login({ onBack }: LoginProps) {
   const { login, register, verifyOtp, pendingOtp } = useAuth();
   const [mode, setMode] = useState<"login" | "register" | "otp">("login");
@@ -45,12 +61,14 @@ export function Login({ onBack }: LoginProps) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [role, setRole] = useState<Role>("contributor");
   const [isAdult, setIsAdult] = useState(true);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
   const [otpSentTo, setOtpSentTo] = useState("");
+  const otpRefs = useRef<HTMLInputElement[]>([]);
 
   useEffect(() => {
     if (mode === "otp" && pendingOtp) setOtpSentTo(pendingOtp.email);
@@ -99,19 +117,30 @@ export function Login({ onBack }: LoginProps) {
 
   const handleOtpChange = (index: number, value: string) => {
     if (!/^\d*$/.test(value)) return;
-    const digits = value.slice(-1);
+    const digit = value.slice(-1);
     const next = [...otp];
-    next[index] = digits;
+    next[index] = digit;
     setOtp(next);
-    if (digits && index < 5) {
-      document.getElementById(`otp-${index + 1}`)?.focus();
+    if (digit && index < 5) {
+      otpRefs.current[index + 1]?.focus();
     }
   };
 
   const handleOtpKeyDown = (index: number, e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace" && !otp[index] && index > 0) {
-      document.getElementById(`otp-${index - 1}`)?.focus();
+      otpRefs.current[index - 1]?.focus();
     }
+  };
+
+  const handleOtpPaste = (e: React.ClipboardEvent) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    const next = [...otp];
+    pasted.split("").forEach((d, i) => {
+      if (i < 6) next[i] = d;
+    });
+    setOtp(next);
+    otpRefs.current[Math.min(pasted.length, 5)]?.focus();
   };
 
   const handleOtp = (e: React.FormEvent) => {
@@ -142,6 +171,14 @@ export function Login({ onBack }: LoginProps) {
     setErrors({});
     setPassword("");
   };
+
+  const divider = (
+    <div className="flex items-center gap-3 my-6">
+      <div className="h-px flex-1 bg-cream-dark" />
+      <span className="text-xs font-medium text-charcoal-light uppercase tracking-wider">Or continue with</span>
+      <div className="h-px flex-1 bg-cream-dark" />
+    </div>
+  );
 
   return (
     <div className="min-h-screen bg-cream flex flex-col transition-colors duration-300">
@@ -174,7 +211,7 @@ export function Login({ onBack }: LoginProps) {
                 transition={{ delay: 0.2, duration: 0.4 }}
                 className="text-2xl sm:text-3xl font-bold text-charcoal mb-2 font-display"
               >
-                {mode === "otp" ? "Check your email" : mode === "login" ? "Welcome back" : "Join the pilot"}
+                {mode === "otp" ? "Check your email" : mode === "login" ? "Welcome back" : "Create account"}
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0, y: 10 }}
@@ -185,8 +222,8 @@ export function Login({ onBack }: LoginProps) {
                 {mode === "otp"
                   ? `Enter the 6-digit code sent to ${otpSentTo || email}`
                   : mode === "login"
-                  ? "Sign in to continue your language journey."
-                  : "Create an account to start contributing."}
+                  ? "Sign in to continue building Liberia's voice dataset."
+                  : "Join thousands of contributors preserving Koloqua."}
               </motion.p>
             </div>
 
@@ -206,12 +243,14 @@ export function Login({ onBack }: LoginProps) {
                       <input
                         key={i}
                         id={`otp-${i}`}
+                        ref={(el) => { if (el) otpRefs.current[i] = el; }}
                         type="text"
                         inputMode="numeric"
                         maxLength={1}
                         value={digit}
                         onChange={(e) => handleOtpChange(i, e.target.value)}
                         onKeyDown={(e) => handleOtpKeyDown(i, e)}
+                        onPaste={handleOtpPaste}
                         className="w-12 h-14 sm:w-14 sm:h-16 text-center text-2xl font-bold rounded-xl border border-cream-dark bg-cream text-charcoal focus:border-terracotta focus:ring-2 focus:ring-terracotta/20 outline-none transition-all"
                       />
                     ))}
@@ -271,7 +310,8 @@ export function Login({ onBack }: LoginProps) {
                         icon={<Mail className="w-4 h-4" />}
                       />
 
-                      <div className="bg-cream border border-cream-dark rounded-xl p-4">
+                      <div className="bg-cream border border-cream-dark rounded-xl p-4"
+                      >
                         <div className="flex items-start gap-3">
                           <div className="w-8 h-8 rounded-lg bg-terracotta/10 flex items-center justify-center text-terracotta shrink-0">
                             <Sparkles className="w-4 h-4" />
@@ -317,16 +357,26 @@ export function Login({ onBack }: LoginProps) {
                         </div>
                       </div>
 
-                      <Input
-                        label="Create password"
-                        type="password"
-                        placeholder="At least 10 characters"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        error={errors.password}
-                        autoComplete="new-password"
-                        icon={<Lock className="w-4 h-4" />}
-                      />
+                      <div className="relative">
+                        <Input
+                          label="Create password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="At least 10 characters"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          error={errors.password}
+                          autoComplete="new-password"
+                          icon={<Lock className="w-4 h-4" />}
+                          className="pr-10"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((v) => !v)}
+                          className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
 
                       <label className="flex items-start gap-3 p-4 rounded-xl border border-cream-dark cursor-pointer hover:border-terracotta/30 transition-colors"
                       >
@@ -372,6 +422,13 @@ export function Login({ onBack }: LoginProps) {
                   onSubmit={handleAuth}
                   className="space-y-5"
                 >
+                  <div className="grid grid-cols-2 gap-3">
+                    <SocialButton icon={Chrome} label="Google" />
+                    <SocialButton icon={Github} label="GitHub" />
+                  </div>
+
+                  {divider}
+
                   <Input
                     label="Email address"
                     type="email"
@@ -383,22 +440,31 @@ export function Login({ onBack }: LoginProps) {
                     icon={<Mail className="w-4 h-4" />}
                   />
 
-                  <div className="space-y-1">
+                  <div className="relative">
                     <Input
                       label="Password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       error={errors.password}
                       autoComplete="current-password"
                       icon={<Lock className="w-4 h-4" />}
+                      className="pr-10"
                     />
-                    <div className="flex justify-end">
-                      <button type="button" className="text-xs text-terracotta font-medium hover:underline">
-                        Forgot password?
-                      </button>
-                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-3 top-[38px] text-charcoal-light hover:text-charcoal"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    </button>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button type="button" className="text-xs text-terracotta font-medium hover:underline">
+                      Forgot password?
+                    </button>
                   </div>
 
                   {errors.form && <p className="text-sm text-coral-600 text-center font-medium">{errors.form}</p>}
@@ -411,21 +477,29 @@ export function Login({ onBack }: LoginProps) {
             </AnimatePresence>
 
             {mode !== "otp" && (
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
-                className="mt-8 text-center text-sm text-charcoal-light"
+                className="mt-8 space-y-4"
               >
-                {mode === "login" ? "New to Koloqua AI? " : "Already have an account? "}
-                <button
-                  type="button"
-                  onClick={() => switchMode(mode === "login" ? "register" : "login")}
-                  className="text-terracotta font-semibold hover:underline"
+                {mode === "register" && (
+                  <p className="text-center text-xs text-charcoal-light">
+                    By creating an account, you agree to our data consent and community guidelines.
+                  </p>
+                )}
+                <p className="text-center text-sm text-charcoal-light"
                 >
-                  {mode === "login" ? "Create an account" : "Sign in"}
-                </button>
-              </motion.p>
+                  {mode === "login" ? "New to Koloqua AI? " : "Already have an account? "}
+                  <button
+                    type="button"
+                    onClick={() => switchMode(mode === "login" ? "register" : "login")}
+                    className="text-terracotta font-semibold hover:underline"
+                  >
+                    {mode === "login" ? "Create an account" : "Sign in"}
+                  </button>
+                </p>
+              </motion.div>
             )}
           </div>
         </motion.div>
