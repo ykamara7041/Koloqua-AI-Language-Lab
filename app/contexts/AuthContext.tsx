@@ -24,10 +24,26 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-// Demo in-memory user store. Production uses a backend database.
-const userStore: User[] = [];
-
 const OTP_TTL_MS = 5 * 60 * 1000;
+
+// Pre-seed the admin account for competition demo use.
+// Production will store users in a backend database with hashed passwords.
+const ADMIN_EMAIL = "admin@koloquaai.org";
+const ADMIN_PASSWORD = "KoloquaAdmin2026!";
+
+const userStore: User[] = [
+  {
+    id: "u-admin-001",
+    name: "Koloqua Admin",
+    email: ADMIN_EMAIL,
+    role: "admin",
+    institution: "Koloqua AI",
+    isAdult: true,
+    hasConsented: true,
+    joinedAt: "2025-11-20",
+    sessionToken: generateSessionToken(),
+  },
+];
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const { value: pending, setValue: setPending, remove: removePending, hydrated: pendingHydrated } = useLocalStorage<PendingSession | null>("koloqua_pending_otp", null);
@@ -45,11 +61,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [userHydrated, pendingHydrated, stored, pending]);
 
   const checkPassword = useCallback((password: string) => {
-    // In production this is replaced by a backend password check.
-    // The demo accepts any password that meets the client-side strength rules.
     const result = validatePassword(password);
     if (!result.ok) return { ok: false, error: result.reason || "Password does not meet requirements." };
     return { ok: true };
+  }, []);
+
+  const verifyAdminPassword = useCallback((email: string, password: string) => {
+    if (email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase()) {
+      return password === ADMIN_PASSWORD;
+    }
+    return true;
   }, []);
 
   const createPendingSession = useCallback((email: string, user: User) => {
@@ -57,10 +78,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const session: PendingSession = { email, otp, expiresAt: Date.now() + OTP_TTL_MS, user };
     setPending(session);
     setPendingOtp(session);
-    // In production this code is sent to email/SMS; in demo we log to console for testing.
-    if (process.env.NODE_ENV === "development") {
-      console.log(`[DEMO OTP] ${email}: ${otp}`);
-    }
     return session;
   }, [setPending]);
 
@@ -79,11 +96,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     (email: string, password: string) => {
       let target = userStore.find((u) => u.email.toLowerCase() === email.toLowerCase());
       if (!target) {
-        // Demo fallback: auto-create known admin/contributor/reviewer accounts on first login.
         const knownRole = email.toLowerCase().startsWith("admin") ? "admin" : email.toLowerCase().startsWith("reviewer") ? "reviewer" : "contributor";
         target = {
           id: generateSessionToken(),
-          name: email.split("@")[0].replace(/\./g, " ").split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          name: email.split("@")[0].replace(/\./g, " ").split(" ").map((w) => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
           email: email.toLowerCase().trim(),
           role: knownRole,
           institution: "Koloqua AI",
@@ -95,13 +111,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         userStore.push(target);
       }
 
+      if (target.role === "admin" && !verifyAdminPassword(email, password)) {
+        return { ok: false, error: "Invalid admin credentials." };
+      }
+
       const pwd = checkPassword(password);
       if (!pwd.ok) return { ok: false, error: pwd.error };
 
       const session = createPendingSession(email, target);
       return { ok: true, needsOtp: true, otp: session.otp };
     },
-    [checkPassword, createPendingSession]
+    [checkPassword, createPendingSession, verifyAdminPassword]
   );
 
   const register = useCallback(
@@ -109,6 +129,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (userStore.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
         return { ok: false, error: "An account with this email already exists." };
       }
+
+      if (email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase()) {
+        return { ok: false, error: "This email is reserved." };
+      }
+
       const pwd = checkPassword(password);
       if (!pwd.ok) return { ok: false, error: pwd.error };
 
@@ -152,9 +177,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = useCallback(() => {
     setStored(null);
     setUser(null);
-    removePending();
-    setPendingOtp(null);
-  }, [setStored, removePending]);
+  }, [setStored]);
 
   return (
     <AuthContext.Provider value={{ user, pendingOtp, login, verifyOtp, register, logout, loading }}>
@@ -165,6 +188,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used inside AuthProvider");
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
   return ctx;
 }
