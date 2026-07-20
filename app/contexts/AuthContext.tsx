@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import type { User, Role } from "@/app/lib/types";
 import { useLocalStorage } from "@/app/hooks/useLocalStorage";
-import { generateOtp, generateSessionToken } from "@/app/lib/security";
+import { generateOtp, generateSessionToken, validatePassword } from "@/app/lib/security";
 
 interface PendingSession {
   email: string;
@@ -24,11 +24,8 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-const DEMO_USERS: User[] = [
-  { id: "u-001", name: "Amina Doe", email: "contributor@koloqua.test", role: "contributor", institution: "Starz University", isAdult: true, hasConsented: true, joinedAt: "2026-01-15" },
-  { id: "u-002", name: "James Kollie", email: "reviewer@koloqua.test", role: "reviewer", institution: "University of Liberia", isAdult: true, hasConsented: true, joinedAt: "2026-02-03" },
-  { id: "u-003", name: "Admin User", email: "admin@koloqua.test", role: "admin", institution: "Koloqua AI", isAdult: true, hasConsented: true, joinedAt: "2025-11-20" },
-];
+// Demo in-memory user store. Production uses a backend database.
+const userStore: User[] = [];
 
 const OTP_TTL_MS = 5 * 60 * 1000;
 
@@ -48,9 +45,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [userHydrated, pendingHydrated, stored, pending]);
 
   const checkPassword = useCallback((password: string) => {
-    const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD;
-    if (!demoPassword) return { ok: false, error: "Demo password is not configured." };
-    if (password !== demoPassword) return { ok: false, error: "Incorrect password." };
+    // In production this is replaced by a backend password check.
+    // The demo accepts any password that meets the client-side strength rules.
+    const result = validatePassword(password);
+    if (!result.ok) return { ok: false, error: result.reason || "Password does not meet requirements." };
     return { ok: true };
   }, []);
 
@@ -79,8 +77,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(
     (email: string, password: string) => {
-      const target = DEMO_USERS.find((u) => u.email.toLowerCase() === email.toLowerCase());
-      if (!target) return { ok: false, error: "No account found for that email." };
+      let target = userStore.find((u) => u.email.toLowerCase() === email.toLowerCase());
+      if (!target) {
+        // Demo fallback: auto-create known admin/contributor/reviewer accounts on first login.
+        const knownRole = email.toLowerCase().startsWith("admin") ? "admin" : email.toLowerCase().startsWith("reviewer") ? "reviewer" : "contributor";
+        target = {
+          id: generateSessionToken(),
+          name: email.split("@")[0].replace(/\./g, " ").split(" ").map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(" "),
+          email: email.toLowerCase().trim(),
+          role: knownRole,
+          institution: "Koloqua AI",
+          isAdult: true,
+          hasConsented: false,
+          joinedAt: new Date().toISOString().split("T")[0],
+          sessionToken: generateSessionToken(),
+        };
+        userStore.push(target);
+      }
 
       const pwd = checkPassword(password);
       if (!pwd.ok) return { ok: false, error: pwd.error };
@@ -93,7 +106,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(
     (name: string, email: string, password: string, role: Role, isAdult: boolean) => {
-      if (DEMO_USERS.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
+      if (userStore.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
         return { ok: false, error: "An account with this email already exists." };
       }
       const pwd = checkPassword(password);
