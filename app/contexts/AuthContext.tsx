@@ -30,6 +30,7 @@ const OTP_TTL_MS = 5 * 60 * 1000;
 // Production will store users in a backend database with hashed passwords.
 const ADMIN_EMAIL = "admin@koloquaai.org";
 const ADMIN_PASSWORD = "KoloquaAdmin2026!";
+const ADMIN_OTP = "123456";
 
 const userStore: User[] = [
   {
@@ -74,7 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const createPendingSession = useCallback((email: string, user: User) => {
-    const otp = generateOtp(email);
+    const otp = email.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase() ? ADMIN_OTP : generateOtp(email);
     const session: PendingSession = { email, otp, expiresAt: Date.now() + OTP_TTL_MS, user };
     setPending(session);
     setPendingOtp(session);
