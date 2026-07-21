@@ -183,14 +183,14 @@ export function Login({ onBack }: LoginProps) {
   );
 
   return (
-    <div className="min-h-screen bg-cream flex flex-col transition-colors duration-300">
-      <div className="fixed top-0 left-0 right-0 z-10 bg-cream/80 backdrop-blur-xl border-b border-cream-dark/50 h-16 flex items-center px-4 sm:px-8 transition-colors duration-300">
+    <div className="h-screen w-screen overflow-hidden bg-cream flex flex-col transition-colors duration-300">
+      <div className="fixed top-0 left-0 right-0 z-10 bg-cream/90 backdrop-blur-xl border-b border-cream-dark/50 h-14 flex items-center px-4 sm:px-8 transition-colors duration-300">
         <button onClick={onBack} className="flex items-center gap-2 text-sm font-medium text-charcoal-light hover:text-charcoal transition-colors">
           <ArrowLeft className="w-4 h-4" /> Back to home
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row">
+      <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-3.5rem)] overflow-hidden">
         {/* Left side - visual panel */}
         <div className="hidden lg:flex lg:w-1/2 relative bg-surface-dark overflow-hidden">
           <Image
@@ -225,14 +225,14 @@ export function Login({ onBack }: LoginProps) {
         </div>
     </div>
         {/* Right side - auth form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-20 lg:pt-16 min-h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] lg:max-h-none overflow-y-auto">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 overflow-y-auto lg:overflow-hidden">
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, ease: easing }}
             className="w-full max-w-md"
           >
-            <div className="bg-cream-100 rounded-3xl border border-cream-dark shadow-elevated p-6 sm:p-10 w-full max-w-md my-auto lg:my-0">
+            <div className="bg-cream-100 rounded-2xl sm:rounded-3xl border border-cream-dark shadow-elevated p-5 sm:p-8 w-full max-w-md">
               <div className="text-center mb-8">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
@@ -246,7 +246,7 @@ export function Login({ onBack }: LoginProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="text-2xl sm:text-3xl font-bold text-charcoal mb-2 font-display"
+                  className="text-xl sm:text-2xl lg:text-3xl font-bold text-charcoal mb-1 sm:mb-2 font-display"
                 >
                   {mode === "otp" ? "Check your email" : mode === "login" ? "Welcome back" : "Create account"}
                 </motion.h2>
@@ -254,7 +254,7 @@ export function Login({ onBack }: LoginProps) {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.25, duration: 0.4 }}
-                  className="text-sm text-charcoal-light"
+                  className="text-xs sm:text-sm text-charcoal-light leading-snug"
                 >
                   {mode === "otp"
                     ? `Enter the 6-digit code sent to ${otpSentTo || email}`
