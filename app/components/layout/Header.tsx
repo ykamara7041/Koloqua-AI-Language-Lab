@@ -3,7 +3,7 @@
 import { Bell, Menu, User, Sun, Moon } from "lucide-react";
 import { useAuth } from "@/app/contexts/AuthContext";
 import { useTheme } from "@/app/contexts/ThemeContext";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const viewNames: Record<string, string> = {
   overview: "Dashboard",
@@ -30,10 +30,10 @@ export function Header({ onMenu, currentView = "overview" }: { onMenu: () => voi
     .join("")
     .toUpperCase() || "G";
 
-  const ThemeIcon = resolvedTheme === "dark" ? Sun : Moon;
+  const isDark = resolvedTheme === "dark";
 
   return (
-    <header className="sticky top-0 z-30 h-16 bg-cream/80 backdrop-blur-xl border-b border-cream-dark/50 px-4 sm:px-6 flex items-center justify-between transition-colors duration-300">
+    <header className="sticky top-0 z-30 h-16 bg-cream/90 backdrop-blur-xl border-b border-cream-dark/60 px-4 sm:px-6 flex items-center justify-between transition-colors duration-300">
       <div className="flex items-center gap-4">
         <button
           onClick={onMenu}
@@ -56,18 +56,32 @@ export function Header({ onMenu, currentView = "overview" }: { onMenu: () => voi
 
         <button
           onClick={toggleTheme}
-          className="w-9 h-9 flex items-center justify-center rounded-lg border border-cream-dark text-charcoal-light hover:text-terracotta hover:border-terracotta/30 hover:bg-cream-dark transition-colors"
-          aria-label={resolvedTheme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+          className="relative w-9 h-9 flex items-center justify-center rounded-lg border border-cream-dark text-charcoal-light hover:text-terracotta hover:border-terracotta/40 hover:bg-cream-dark transition-colors overflow-hidden"
+          aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
         >
-          <motion.div
-            key={resolvedTheme}
-            initial={{ rotate: -30, opacity: 0 }}
-            animate={{ rotate: 0, opacity: 1 }}
-            exit={{ rotate: 30, opacity: 0 }}
-            transition={{ duration: 0.25 }}
-          >
-            <ThemeIcon className="w-4 h-4" />
-          </motion.div>
+          <AnimatePresence mode="wait" initial={false}>
+            {isDark ? (
+              <motion.div
+                key="sun"
+                initial={{ y: -20, opacity: 0, rotate: -90 }}
+                animate={{ y: 0, opacity: 1, rotate: 0 }}
+                exit={{ y: 20, opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Sun className="w-4 h-4" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="moon"
+                initial={{ y: -20, opacity: 0, rotate: -90 }}
+                animate={{ y: 0, opacity: 1, rotate: 0 }}
+                exit={{ y: 20, opacity: 0, rotate: 90 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Moon className="w-4 h-4" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </button>
 
         <button className="relative w-9 h-9 flex items-center justify-center rounded-lg border border-cream-dark text-charcoal-light hover:bg-cream-dark hover:text-charcoal transition-colors"

@@ -46,12 +46,9 @@ export function Shell({ children, view, onNavigate }: ShellProps) {
   };
 
   return (
-    <div
-      className="min-h-screen flex bg-cream text-charcoal transition-colors duration-300"
-      data-theme={resolvedTheme}
-    >
+    <div className={`min-h-screen flex ${resolvedTheme === "dark" ? "dark" : ""} bg-cream text-charcoal transition-colors duration-300`}>
       <Sidebar active={view} onNavigate={onNavigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 min-w-0 flex flex-col">
+      <div className="flex-1 min-w-0 flex flex-col bg-cream transition-colors duration-300">
         <Header onMenu={() => setSidebarOpen(true)} currentView={view} />
         <main className="flex-1">
           <ToastProvider />
