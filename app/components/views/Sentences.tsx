@@ -199,7 +199,7 @@ export function Sentences() {
       <div className="mt-8">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-bold text-slate-900">Community sentences</h2>
-          <Badge tone="forest">{prompts.length} submitted</Badge>
+          <Badge variant="success">{prompts.length} submitted</Badge>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -207,7 +207,7 @@ export function Sentences() {
             <motion.div key={prompt.id} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
               <Card className="p-5">
                 <div className="flex items-start justify-between mb-3">
-                  <Badge tone={prompt.status === "approved" ? "green" : prompt.status === "rejected" ? "red" : "gold"}>
+                  <Badge variant={prompt.status === "approved" ? "success" : prompt.status === "rejected" ? "danger" : "warning"}>
                     {prompt.status}
                   </Badge>
                   <span className="text-xs text-slate-400">{prompt.id}</span>

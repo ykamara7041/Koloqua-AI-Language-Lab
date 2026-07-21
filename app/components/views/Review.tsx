@@ -93,8 +93,8 @@ export function Review() {
                       </div>
                       <strong className="block text-sm text-slate-900 truncate">{item.text}</strong>
                       <div className="flex flex-wrap gap-1.5 mt-1.5">
-                        {item.flags && <Badge tone="gold">{flagLabels[item.flags]}</Badge>}
-                        {itemStatus && <Badge tone={itemStatus === "Approved" ? "green" : itemStatus === "Rejected" ? "red" : "gold"}>{itemStatus}</Badge>}
+                        {item.flags && <Badge variant="warning">{flagLabels[item.flags]}</Badge>}
+                        {itemStatus && <Badge variant={itemStatus === "Approved" ? "success" : itemStatus === "Rejected" ? "danger" : "warning"}>{itemStatus}</Badge>}
                       </div>
                     </div>
                   </div>
@@ -110,7 +110,7 @@ export function Review() {
               <span className="section-title">{selected.id}</span>
               <h2 className="text-3xl font-bold text-slate-900 mt-1 font-display">{selected.text}</h2>
             </div>
-            <Badge tone={selected.flags ? "gold" : "green"}>{selected.flags ? "Needs attention" : "Quality good"}</Badge>
+            <Badge variant={selected.flags ? "warning" : "success"}>{selected.flags ? "Needs attention" : "Quality good"}</Badge>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">

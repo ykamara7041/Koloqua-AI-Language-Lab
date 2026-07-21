@@ -29,7 +29,7 @@ export function Leaderboard() {
                 <p className="text-xs text-slate-500">Ranked by approved contributions this month</p>
               </div>
             </div>
-            <Badge tone="gold">This month</Badge>
+            <Badge variant="warning">This month</Badge>
           </div>
 
           <div className="divide-y divide-slate-100">
@@ -82,7 +82,7 @@ export function Leaderboard() {
                 <span className="text-xs text-slate-500">15 days by Sarah Weah</span>
               </div>
             </div>
-            <Progress value={15} max={30} size="md" color="gold" />
+            <Progress value={15} max={30} size="md" barClassName="bg-gold-500" />
           </Card>
 
           <Card className="p-6">
@@ -95,7 +95,7 @@ export function Leaderboard() {
                 <span className="text-xs text-slate-500">+18% vs last month</span>
               </div>
             </div>
-            <Progress value={86} max={100} size="md" color="blue" />
+            <Progress value={86} max={100} size="md" barClassName="bg-blue-500" />
           </Card>
 
           <Card className="p-6">
@@ -108,7 +108,7 @@ export function Leaderboard() {
                 <span className="text-xs text-slate-500">47 contributors recording</span>
               </div>
             </div>
-            <Progress value={47} max={100} size="md" color="purple" />
+            <Progress value={47} max={100} size="md" barClassName="bg-purple-500" />
           </Card>
         </div>
       </div>

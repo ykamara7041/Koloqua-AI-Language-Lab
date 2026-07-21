@@ -49,8 +49,8 @@ export function Institutions() {
                     </div>
                   </div>
                   <div className="flex flex-col items-end gap-2">
-                    <Badge tone={inst.verified ? "green" : "gold"}>{inst.verified ? "Verified" : "Pending"}</Badge>
-                    <Badge tone="gray" className="capitalize">{inst.tier}</Badge>
+                    <Badge variant={inst.verified ? "success" : "warning"}>{inst.verified ? "Verified" : "Pending"}</Badge>
+                    <Badge variant="default" className="capitalize">{inst.tier}</Badge>
                   </div>
                 </div>
 
@@ -83,7 +83,7 @@ export function Institutions() {
                     <span className="text-slate-500">Approval rate</span>
                     <span className="font-bold text-forest-700">{Math.round((inst.approvedItems / total) * 100)}%</span>
                   </div>
-                  <Progress value={inst.approvedItems} max={total} size="sm" color="forest" />
+                  <Progress value={inst.approvedItems} max={total} size="sm" barClassName="bg-forest-600" />
                 </div>
 
                 <Button variant="secondary" size="sm" onClick={() => toast.info(`Opening ${inst.name} details...`)}>

@@ -1,29 +1,54 @@
 "use client";
 
-import { type ReactNode } from "react";
-import { clsx } from "clsx";
+import { useEffect, type ReactNode } from "react";
 import { X } from "lucide-react";
+import { clsx } from "clsx";
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
-  title?: string;
+  title: string;
   description?: string;
   children: ReactNode;
+  className?: string;
 }
 
-export function Modal({ open, onClose, title, description, children }: ModalProps) {
+export function Modal({ open, onClose, title, description, children, className }: ModalProps) {
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
   if (!open) return null;
+
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-slate-950/50" onClick={onClose} />
-      <div className={clsx("relative z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-elevated")}>
-        <button onClick={onClose} className="absolute right-4 top-4 text-slate-400 hover:text-slate-700" aria-label="Close">
-          <X className="w-5 h-5" />
-        </button>
-        {title && <h3 className="text-lg font-bold text-slate-900">{title}</h3>}
-        {description && <p className="text-sm text-slate-500 mt-1">{description}</p>}
-        <div className="mt-4">{children}</div>
+      <div className="absolute inset-0 bg-charcoal/60 backdrop-blur-sm" onClick={onClose} />
+      <div
+        className={clsx(
+          "relative w-full max-w-lg bg-cream-100 rounded-2xl border border-cream-dark shadow-elevated p-6",
+          className
+        )}
+      >
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <h3 className="text-lg font-bold text-charcoal">{title}</h3>
+            {description && <p className="text-sm text-charcoal-light mt-1">{description}</p>}
+          </div>
+          <button
+            onClick={onClose}
+            className="w-8 h-8 flex items-center justify-center rounded-lg text-charcoal-light hover:text-charcoal hover:bg-cream-dark transition-colors"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+        {children}
       </div>
     </div>
   );

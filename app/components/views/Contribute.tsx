@@ -117,11 +117,11 @@ export function Contribute() {
                 )}
               >
                 <div className="flex items-center justify-between mb-2">
-                  <Badge tone={task.category === "Health" ? "blue" : task.category === "Market" ? "gold" : "forest"}>{task.category}</Badge>
+                  <Badge variant={task.category === "Health" ? "info" : task.category === "Market" ? "warning" : "success"}>{task.category}</Badge>
                   <span className="text-xs font-bold text-forest-700">L${task.reward}</span>
                 </div>
                 <strong className="block text-sm text-slate-900 mb-2">{task.english}</strong>
-                <Progress value={task.done} max={task.total} size="sm" color="forest" showLabel />
+                <Progress value={task.done} max={task.total} size="sm" barClassName="bg-forest-600" />
               </button>
             ))}
           </div>

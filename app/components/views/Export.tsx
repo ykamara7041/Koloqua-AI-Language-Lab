@@ -89,7 +89,7 @@ export function Export() {
                     </div>
                   </div>
                 </div>
-                <Badge tone="green"><CheckCircle className="w-3 h-3" /> Approved</Badge>
+                <Badge variant="success"><CheckCircle className="w-3 h-3" /> Approved</Badge>
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-6">

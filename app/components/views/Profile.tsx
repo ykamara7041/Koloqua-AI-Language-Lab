@@ -63,7 +63,7 @@ export function Profile() {
             </div>
             <h3 className="font-bold text-xl text-slate-900">{user.name}</h3>
             <p className="text-sm text-slate-500">{user.email}</p>
-            <Badge tone="green" className="mt-3">
+            <Badge variant="success" className="mt-3">
               <ShieldCheck className="w-3 h-3" /> {user.role}
             </Badge>
             <div className="w-full border-t border-slate-100 mt-6 pt-6 text-left">
@@ -192,7 +192,7 @@ export function Profile() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
                         <strong className="text-sm text-slate-900">{ach.title}</strong>
-                        {ach.unlockedAt && <Badge tone="green">Unlocked</Badge>}
+                        {ach.unlockedAt && <Badge variant="success">Unlocked</Badge>}
                       </div>
                       <p className="text-xs text-slate-500 mt-1">{ach.description}</p>
                       <div className="mt-3">
@@ -200,7 +200,7 @@ export function Profile() {
                           <span className="text-slate-500">{ach.progress}/{ach.total}</span>
                           <span className="font-medium text-forest-700">{Math.round((ach.progress / ach.total) * 100)}%</span>
                         </div>
-                        <Progress value={ach.progress} max={ach.total} size="sm" color="forest" />
+                        <Progress value={ach.progress} max={ach.total} size="sm" barClassName="bg-forest-600" />
                       </div>
                     </div>
                   </div>

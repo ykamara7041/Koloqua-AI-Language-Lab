@@ -46,14 +46,14 @@ function AchievementCard({ achievement, index }: { achievement: Achievement; ind
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2 mb-1">
               <h3 className={clsx("font-bold text-slate-900", !unlocked && "text-slate-500")}>{achievement.title}</h3>
-              <Badge tone={achievement.rarity === "epic" ? "purple" : achievement.rarity === "rare" ? "blue" : "gray"} className="capitalize">
+              <Badge variant={achievement.rarity === "epic" ? "info" : achievement.rarity === "rare" ? "success" : "default"} className="capitalize">
                 {achievement.rarity}
               </Badge>
             </div>
             <p className="text-sm text-slate-500 mb-3">{achievement.description}</p>
 
             <div className="flex items-center gap-3 mb-2">
-              <Progress value={achievement.progress} max={achievement.total} size="sm" color={unlocked ? "forest" : "gold"} className="flex-1" />
+              <Progress value={achievement.progress} max={achievement.total} size="sm" barClassName={unlocked ? "bg-forest-600" : "bg-gold-500"} className="flex-1" />
               <span className="text-xs font-semibold text-slate-600 shrink-0">
                 {achievement.progress}/{achievement.total}
               </span>
@@ -129,7 +129,7 @@ export function Achievements() {
         <div className="flex items-center gap-3">
           <Medal className="w-5 h-5 text-forest-600" />
           <h2 className="text-lg font-bold text-slate-900">Unlocked</h2>
-          <Badge tone="green">{unlocked.length}</Badge>
+          <Badge variant="success">{unlocked.length}</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {unlocked.map((a, i) => (
@@ -142,7 +142,7 @@ export function Achievements() {
         <div className="flex items-center gap-3">
           <Star className="w-5 h-5 text-amber-500" />
           <h2 className="text-lg font-bold text-slate-900">In progress</h2>
-          <Badge tone="gold">{inProgress.length}</Badge>
+          <Badge variant="warning">{inProgress.length}</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {inProgress.map((a, i) => (

@@ -109,15 +109,15 @@ export function Audit() {
                   </td>
                   <td className="px-5 py-4">
                     {event.risk === "high" ? (
-                      <Badge tone="red">
+                      <Badge variant="danger">
                         <ShieldAlert className="w-3 h-3" /> High
                       </Badge>
                     ) : event.risk === "medium" ? (
-                      <Badge tone="gold">
+                      <Badge variant="warning">
                         <AlertTriangle className="w-3 h-3" /> Medium
                       </Badge>
                     ) : (
-                      <Badge tone="green">
+                      <Badge variant="success">
                         <CheckCircle className="w-3 h-3" /> Low
                       </Badge>
                     )}

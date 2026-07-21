@@ -93,7 +93,7 @@ export function Consent() {
                 <div key={rec.id} className="border-b border-slate-100 last:border-0 pb-4 last:pb-0">
                   <div className="flex items-center justify-between mb-1">
                     <strong className="text-sm text-slate-900">{rec.version}</strong>
-                    <Badge tone="green">Active</Badge>
+                    <Badge variant="success">Active</Badge>
                   </div>
                   <time className="text-xs text-slate-500" dateTime={rec.agreedAt}>
                     {new Date(rec.agreedAt).toLocaleDateString()}

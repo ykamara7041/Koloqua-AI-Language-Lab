@@ -14,7 +14,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(({ label, error, i
     <div className={clsx("space-y-1.5", className)}>
       {label && <label className="label">{label}</label>}
       <div className="relative">
-        {icon && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">{icon}</span>}
+        {icon && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-charcoal-light">{icon}</span>}
         <input
           ref={ref}
           className={clsx(

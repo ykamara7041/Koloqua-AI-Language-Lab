@@ -119,10 +119,10 @@ export function Admin() {
             <p className="text-sm text-slate-500 mb-4">{card.desc}</p>
             {card.badges && (
               <div className="flex flex-wrap gap-2 mb-3">
-                {card.badges.map((b) => <Badge key={b} tone={b === "Synthetic" ? "gold" : "green"}>{b}</Badge>)}
+                {card.badges.map((b) => <Badge key={b} variant={b === "Synthetic" ? "warning" : "success"}>{b}</Badge>)}
               </div>
             )}
-            {card.badge && <Badge tone="green">{card.badge}</Badge>}
+            {card.badge && <Badge variant="success">{card.badge}</Badge>}
             {card.action && <Button variant="secondary" size="sm" onClick={() => toast.info(`${card.action} panel opened.`)}>{card.action}</Button>}
           </Card>
         ))}

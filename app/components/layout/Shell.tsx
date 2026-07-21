@@ -9,6 +9,7 @@ import { Button } from "@/app/components/ui/Button";
 import { Input } from "@/app/components/ui/Input";
 import { useSecurity } from "@/app/hooks/useSecurity";
 import { useAuth } from "@/app/contexts/AuthContext";
+import { useTheme } from "@/app/contexts/ThemeContext";
 import type { View } from "@/app/lib/types";
 
 interface ShellProps {
@@ -20,6 +21,7 @@ interface ShellProps {
 export function Shell({ children, view, onNavigate }: ShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { user } = useAuth();
+  const { resolvedTheme } = useTheme();
   const { locked, lock, unlock, updateIdleLock } = useSecurity();
   const [pin, setPin] = useState("");
   const [error, setError] = useState("");
@@ -44,7 +46,10 @@ export function Shell({ children, view, onNavigate }: ShellProps) {
   };
 
   return (
-    <div className="min-h-screen flex">
+    <div
+      className="min-h-screen flex bg-cream text-charcoal transition-colors duration-300"
+      data-theme={resolvedTheme}
+    >
       <Sidebar active={view} onNavigate={onNavigate} open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <div className="flex-1 min-w-0 flex flex-col">
         <Header onMenu={() => setSidebarOpen(true)} currentView={view} />

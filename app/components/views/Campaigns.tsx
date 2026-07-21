@@ -44,7 +44,7 @@ export function Campaigns() {
                     </div>
                   </div>
                 </div>
-                <Badge tone={campaign.status === "active" ? "green" : campaign.status === "paused" ? "gold" : "gray"}>
+                <Badge variant={campaign.status === "active" ? "success" : campaign.status === "paused" ? "warning" : "default"}>
                   {campaign.status}
                 </Badge>
               </div>
@@ -72,7 +72,7 @@ export function Campaigns() {
                   <span className="text-slate-500">Progress</span>
                   <span className="text-forest-700">{Math.round((campaign.collected / campaign.target) * 100)}%</span>
                 </div>
-                <Progress value={campaign.collected} max={campaign.target} size="md" color={campaign.status === "active" ? "forest" : "gold"} />
+                <Progress value={campaign.collected} max={campaign.target} size="md" barClassName={campaign.status === "active" ? "bg-forest-600" : "bg-gold-500"} />
               </div>
 
               <div className="flex items-center justify-between">

@@ -83,12 +83,12 @@ export function Validate() {
                 <p className="text-xs text-slate-500">{current.speaker} · {current.duration}s · quality {current.quality}%</p>
               </div>
             </div>
-            <Badge tone={voted === "yes" ? "green" : voted === "no" ? "red" : "gold"}>
+            <Badge variant={voted === "yes" ? "success" : voted === "no" ? "danger" : "warning"}>
               {voted ? `You voted ${voted}` : "Listening"}
             </Badge>
           </div>
 
-          <Progress value={progress} max={100} size="sm" color="forest" className="mb-8" />
+          <Progress value={progress} max={100} size="sm" barClassName="bg-forest-600" className="mb-8" />
 
           <div className="p-6 rounded-2xl bg-gradient-to-br from-forest-50 to-emerald-50/50 border border-forest-100 mb-8">
             <div className="flex flex-col items-center">

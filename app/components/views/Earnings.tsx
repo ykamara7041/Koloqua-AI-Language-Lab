@@ -199,7 +199,7 @@ export function Earnings() {
             <span className="section-title">Activity</span>
             <h3 className="text-base font-bold text-slate-900 mt-1">Contribution ledger</h3>
           </div>
-          <Badge tone="gold">Demo payments</Badge>
+          <Badge variant="warning">Demo payments</Badge>
         </div>
         <div className="divide-y divide-slate-100">
           {ledgerRows.map((row) => (
@@ -211,7 +211,7 @@ export function Earnings() {
                 <strong className="block text-sm text-slate-900">{row.type}</strong>
                 <span className="text-xs text-slate-500">{row.reference} · {row.date}</span>
               </div>
-              <Badge tone={row.status === "Approved" ? "green" : row.status === "Rejected" ? "red" : "gold"}>{row.status}</Badge>
+              <Badge variant={row.status === "Approved" ? "success" : row.status === "Rejected" ? "danger" : "warning"}>{row.status}</Badge>
               <strong className="text-sm min-w-[70px] text-right">{row.amount}</strong>
             </div>
           ))}
@@ -238,7 +238,7 @@ export function Earnings() {
                 <strong className="block text-sm text-slate-900">{p.id}</strong>
                 <span className="text-xs text-slate-500">{p.phone} · Requested {p.requestedAt}</span>
               </div>
-              <Badge tone={p.status === "paid" ? "green" : "gold"} className="capitalize">{p.status}</Badge>
+              <Badge variant={p.status === "paid" ? "success" : "warning"} className="capitalize">{p.status}</Badge>
               <strong className="text-sm min-w-[80px] text-right">L${p.amount.toLocaleString()}</strong>
             </div>
           ))}
