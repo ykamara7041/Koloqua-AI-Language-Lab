@@ -190,7 +190,7 @@ export function Login({ onBack }: LoginProps) {
         </button>
       </div>
 
-      <div className="flex-1 flex flex-col lg:flex-row min-h-screen">
+      <div className="flex-1 flex flex-col lg:flex-row">
         {/* Left side - visual panel */}
         <div className="hidden lg:flex lg:w-1/2 relative bg-surface-dark overflow-hidden">
           <Image
@@ -225,20 +225,20 @@ export function Login({ onBack }: LoginProps) {
         </div>
     </div>
         {/* Right side - auth form */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-24 lg:pt-16">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-8 pt-20 lg:pt-16 min-h-[calc(100vh-4rem)] max-h-[calc(100vh-4rem)] lg:max-h-none overflow-y-auto">
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.5, ease: easing }}
             className="w-full max-w-md"
           >
-            <div className="bg-cream-100 rounded-3xl border border-cream-dark shadow-elevated p-8 sm:p-10">
+            <div className="bg-cream-100 rounded-3xl border border-cream-dark shadow-elevated p-6 sm:p-10 w-full max-w-md my-auto lg:my-0">
               <div className="text-center mb-8">
                 <motion.div
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, duration: 0.4, ease: easing }}
-                  className="w-16 h-16 rounded-2xl bg-gradient-to-br from-terracotta to-terracotta-light flex items-center justify-center text-white font-bold text-2xl mx-auto mb-5 shadow-lg"
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-terracotta to-terracotta-light flex items-center justify-center text-white font-bold text-xl sm:text-2xl mx-auto mb-4 sm:mb-5 shadow-lg"
                 >
                   K
                 </motion.div>
