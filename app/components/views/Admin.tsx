@@ -49,10 +49,10 @@ export function Admin() {
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${stat.color}`}>
                   <Icon className="w-5 h-5" />
                 </div>
-                <span className="text-xs text-slate-500">{stat.change}</span>
+                <span className="text-xs text-charcoal-light">{stat.change}</span>
               </div>
-              <strong className="block text-2xl font-bold text-slate-900 mt-3">{stat.value}</strong>
-              <span className="text-xs text-slate-500">{stat.label}</span>
+              <strong className="block text-2xl font-bold text-charcoal mt-3">{stat.value}</strong>
+              <span className="text-xs text-charcoal-light">{stat.label}</span>
             </Card>
           );
         })}
@@ -95,7 +95,7 @@ export function Admin() {
             {roleData.map((r) => (
               <div key={r.name} className="flex items-center gap-1.5 text-xs">
                 <span className="w-2 h-2 rounded-full" style={{ background: r.color }} />
-                <span className="text-slate-500">{r.name} ({r.value})</span>
+                <span className="text-charcoal-light">{r.name} ({r.value})</span>
               </div>
             ))}
           </div>
@@ -115,8 +115,8 @@ export function Admin() {
             <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-forest-700 mb-4">
               <card.icon className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-lg text-slate-900 mb-1">{card.title}</h3>
-            <p className="text-sm text-slate-500 mb-4">{card.desc}</p>
+            <h3 className="font-bold text-lg text-charcoal mb-1">{card.title}</h3>
+            <p className="text-sm text-charcoal-light mb-4">{card.desc}</p>
             {card.badges && (
               <div className="flex flex-wrap gap-2 mb-3">
                 {card.badges.map((b) => <Badge key={b} variant={b === "Synthetic" ? "warning" : "success"}>{b}</Badge>)}

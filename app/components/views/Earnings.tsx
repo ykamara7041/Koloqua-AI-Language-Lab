@@ -147,14 +147,14 @@ export function Earnings() {
               <TrendingUp className="w-5 h-5" />
             </div>
             <div>
-              <strong className="block text-2xl font-bold text-slate-900">L$ 4,240</strong>
-              <span className="text-xs text-slate-500">Total lifetime earnings</span>
+              <strong className="block text-2xl font-bold text-charcoal">L$ 4,240</strong>
+              <span className="text-xs text-charcoal-light">Total lifetime earnings</span>
             </div>
           </div>
           <div className="flex items-center gap-2 text-sm text-emerald-700">
             <ArrowUpRight className="w-4 h-4" />
             <span className="font-semibold">+18%</span>
-            <span className="text-slate-500">vs last month</span>
+            <span className="text-charcoal-light">vs last month</span>
           </div>
         </Card>
       </div>
@@ -194,29 +194,29 @@ export function Earnings() {
       </div>
 
       <Card className="overflow-hidden mb-5">
-        <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+        <div className="p-5 border-b border-cream-dark flex items-center justify-between">
           <div>
             <span className="section-title">Activity</span>
-            <h3 className="text-base font-bold text-slate-900 mt-1">Contribution ledger</h3>
+            <h3 className="text-base font-bold text-charcoal mt-1">Contribution ledger</h3>
           </div>
           <Badge variant="warning">Demo payments</Badge>
         </div>
         <div className="divide-y divide-slate-100">
           {ledgerRows.map((row) => (
-            <div className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors" key={row.id}>
+            <div className="flex items-center gap-4 p-4 hover:bg-cream-light transition-colors" key={row.id}>
               <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-forest-700">
                 {row.type.includes("review") ? <ClipboardCheck className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
               </div>
               <div className="flex-1">
-                <strong className="block text-sm text-slate-900">{row.type}</strong>
-                <span className="text-xs text-slate-500">{row.reference} · {row.date}</span>
+                <strong className="block text-sm text-charcoal">{row.type}</strong>
+                <span className="text-xs text-charcoal-light">{row.reference} · {row.date}</span>
               </div>
               <Badge variant={row.status === "Approved" ? "success" : row.status === "Rejected" ? "danger" : "warning"}>{row.status}</Badge>
               <strong className="text-sm min-w-[70px] text-right">{row.amount}</strong>
             </div>
           ))}
         </div>
-        <div className="p-4 border-t border-slate-100 bg-slate-50">
+        <div className="p-4 border-t border-cream-dark bg-cream-light">
           <Button variant="ghost" size="sm">
             <Download className="w-4 h-4" /> Export statement
           </Button>
@@ -224,19 +224,19 @@ export function Earnings() {
       </Card>
 
       <Card className="overflow-hidden">
-        <div className="p-5 border-b border-slate-100">
+        <div className="p-5 border-b border-cream-dark">
           <span className="section-title">Payouts</span>
-          <h3 className="text-base font-bold text-slate-900 mt-1">Withdrawal history</h3>
+          <h3 className="text-base font-bold text-charcoal mt-1">Withdrawal history</h3>
         </div>
         <div className="divide-y divide-slate-100">
           {payouts.map((p) => (
-            <div className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors" key={p.id}>
-              <div className="w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-slate-500">
+            <div className="flex items-center gap-4 p-4 hover:bg-cream-light transition-colors" key={p.id}>
+              <div className="w-10 h-10 rounded-xl bg-cream-light flex items-center justify-center text-charcoal-light">
                 {p.status === "paid" ? <CheckCircle className="w-5 h-5 text-emerald-600" /> : <Clock className="w-5 h-5 text-amber-500" />}
               </div>
               <div className="flex-1">
-                <strong className="block text-sm text-slate-900">{p.id}</strong>
-                <span className="text-xs text-slate-500">{p.phone} · Requested {p.requestedAt}</span>
+                <strong className="block text-sm text-charcoal">{p.id}</strong>
+                <span className="text-xs text-charcoal-light">{p.phone} · Requested {p.requestedAt}</span>
               </div>
               <Badge variant={p.status === "paid" ? "success" : "warning"} className="capitalize">{p.status}</Badge>
               <strong className="text-sm min-w-[80px] text-right">L${p.amount.toLocaleString()}</strong>

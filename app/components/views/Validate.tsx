@@ -75,12 +75,12 @@ export function Validate() {
         <Card className="lg:col-span-2 p-6 md:p-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-forest-600">
+              <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-terracotta">
                 <Headphones className="w-5 h-5" />
               </div>
               <div>
-                <p className="text-sm font-semibold text-slate-900">Clip {index + 1} of {clips.length}</p>
-                <p className="text-xs text-slate-500">{current.speaker} · {current.duration}s · quality {current.quality}%</p>
+                <p className="text-sm font-semibold text-charcoal">Clip {index + 1} of {clips.length}</p>
+                <p className="text-xs text-charcoal-light">{current.speaker} · {current.duration}s · quality {current.quality}%</p>
               </div>
             </div>
             <Badge variant={voted === "yes" ? "success" : voted === "no" ? "danger" : "warning"}>
@@ -122,13 +122,13 @@ export function Validate() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Koloqua text</span>
-              <p className="text-lg font-semibold text-slate-900 mt-1">{current.text}</p>
+            <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+              <span className="text-xs font-bold uppercase tracking-wider text-charcoal-light">Koloqua text</span>
+              <p className="text-lg font-semibold text-charcoal mt-1">{current.text}</p>
             </div>
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Standard English meaning</span>
-              <p className="text-lg text-slate-700 mt-1">{current.translation}</p>
+            <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+              <span className="text-xs font-bold uppercase tracking-wider text-charcoal-light">Standard English meaning</span>
+              <p className="text-lg text-charcoal-light mt-1">{current.translation}</p>
             </div>
           </div>
 
@@ -158,19 +158,19 @@ export function Validate() {
             </Button>
           </div>
 
-          <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-100">
-            <button onClick={prev} className="text-sm font-medium text-slate-500 hover:text-forest-700 transition-colors">← Previous clip</button>
-            <button onClick={next} className="text-sm font-medium text-slate-500 hover:text-forest-700 transition-colors">Next clip →</button>
+          <div className="flex items-center justify-between mt-6 pt-6 border-t border-cream-dark">
+            <button onClick={prev} className="text-sm font-medium text-charcoal-light hover:text-forest-700 transition-colors">← Previous clip</button>
+            <button onClick={next} className="text-sm font-medium text-charcoal-light hover:text-forest-700 transition-colors">Next clip →</button>
           </div>
         </Card>
 
         <div className="space-y-5">
           <Card className="p-6">
             <div className="flex items-center gap-3 mb-4">
-              <Volume2 className="w-5 h-5 text-forest-600" />
-              <strong className="text-slate-900">Validation guide</strong>
+              <Volume2 className="w-5 h-5 text-terracotta" />
+              <strong className="text-charcoal">Validation guide</strong>
             </div>
-            <ul className="space-y-3 text-sm text-slate-600">
+            <ul className="space-y-3 text-sm text-charcoal-light">
               <li className="flex gap-2">
                 <CheckCircle className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
                 Vote yes if the recording matches the text.
@@ -189,20 +189,20 @@ export function Validate() {
           <Card className="p-6">
             <div className="flex items-center gap-3 mb-4">
               <CheckCircle className="w-5 h-5 text-emerald-600" />
-              <strong className="text-slate-900">Your session</strong>
+              <strong className="text-charcoal">Your session</strong>
             </div>
             <div className="space-y-3">
               <div className="flex justify-between text-sm">
-                <span className="text-slate-500">Yes votes</span>
+                <span className="text-charcoal-light">Yes votes</span>
                 <strong className="text-emerald-700">{stats.yes}</strong>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-slate-500">No votes</span>
+                <span className="text-charcoal-light">No votes</span>
                 <strong className="text-red-700">{stats.no}</strong>
               </div>
               <div className="flex justify-between text-sm">
-                <span className="text-slate-500">Skipped</span>
-                <strong className="text-slate-700">{stats.skip}</strong>
+                <span className="text-charcoal-light">Skipped</span>
+                <strong className="text-charcoal-light">{stats.skip}</strong>
               </div>
             </div>
           </Card>

@@ -22,11 +22,11 @@ const weeklyData = [
 ];
 
 const categoryData = [
-  { name: "Daily life", value: 320, color: "#9A3412" },
-  { name: "Health", value: 198, color: "#059669" },
-  { name: "Market", value: 156, color: "#D97706" },
-  { name: "Environment", value: 94, color: "#7C3AED" },
-  { name: "Education", value: 250, color: "#2563EB" },
+  { name: "Daily life", value: 320, color: "var(--accent-light)" },
+  { name: "Health", value: 198, color: "var(--success)" },
+  { name: "Market", value: 156, color: "var(--gold)" },
+  { name: "Environment", value: 94, color: "#A78BFA" },
+  { name: "Education", value: 250, color: "#60A5FA" },
 ];
 
 const recentActivity = [
@@ -115,7 +115,7 @@ export function Overview({ onNavigate }: { onNavigate: (view: View) => void }) {
                   <stat.icon className="w-4 h-4" />
                 </div>
               </div>
-              <p className="text-xs text-forest-600 font-medium mt-3 flex items-center gap-1">
+              <p className="text-xs text-terracotta font-medium mt-3 flex items-center gap-1">
                 <TrendingUp className="w-3 h-3" /> {stat.change} this week
               </p>
             </Card>
@@ -130,16 +130,16 @@ export function Overview({ onNavigate }: { onNavigate: (view: View) => void }) {
               <AreaChart data={weeklyData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorContrib" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#9A3412" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#9A3412" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--accent-light)" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="var(--accent-light)" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="colorReview" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#059669" stopOpacity={0.25} />
-                    <stop offset="95%" stopColor="#059669" stopOpacity={0} />
+                    <stop offset="5%" stopColor="var(--success)" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="var(--success)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="day" stroke="#64748B" fontSize={12} tickLine={false} axisLine={false} />
-                <YAxis stroke="#64748B" fontSize={12} tickLine={false} axisLine={false} />
+                <XAxis dataKey="day" stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip
                   contentStyle={{
                     backgroundColor: "var(--bg-card)",
@@ -149,8 +149,8 @@ export function Overview({ onNavigate }: { onNavigate: (view: View) => void }) {
                   }}
                   itemStyle={{ color: "var(--text)" }}
                 />
-                <Area type="monotone" dataKey="contributions" stroke="#9A3412" strokeWidth={2} fill="url(#colorContrib)" />
-                <Area type="monotone" dataKey="reviews" stroke="#059669" strokeWidth={2} fill="url(#colorReview)" />
+                <Area type="monotone" dataKey="contributions" stroke="var(--accent-light)" strokeWidth={2} fill="url(#colorContrib)" />
+                <Area type="monotone" dataKey="reviews" stroke="var(--success)" strokeWidth={2} fill="url(#colorReview)" />
               </AreaChart>
             </ResponsiveContainer>
           </ChartCard>

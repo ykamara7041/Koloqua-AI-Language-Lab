@@ -11,9 +11,9 @@ import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 const tierStyles = {
-  platinum: "bg-slate-800 text-white",
+  platinum: "bg-surface-dark text-white",
   gold: "bg-amber-400 text-amber-950",
-  silver: "bg-slate-300 text-slate-800",
+  silver: "bg-cream-dark text-charcoal",
 };
 
 export function Institutions() {
@@ -42,8 +42,8 @@ export function Institutions() {
                       <Building2 className="w-6 h-6" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-lg text-slate-900">{inst.name}</h3>
-                      <div className="flex items-center gap-1 text-xs text-slate-500">
+                      <h3 className="font-bold text-lg text-charcoal">{inst.name}</h3>
+                      <div className="flex items-center gap-1 text-xs text-charcoal-light">
                         <MapPin className="w-3 h-3" /> {inst.city}, Liberia
                       </div>
                     </div>
@@ -55,32 +55,32 @@ export function Institutions() {
                 </div>
 
                 <div className="grid grid-cols-3 gap-3 mb-5">
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <div className="flex items-center gap-1 text-slate-500 mb-1">
+                  <div className="p-3 rounded-lg bg-cream-light border border-cream-dark">
+                    <div className="flex items-center gap-1 text-charcoal-light mb-1">
                       <Users className="w-3 h-3" />
                       <span className="text-[10px] font-semibold uppercase">Contributors</span>
                     </div>
-                    <strong className="text-xl font-bold text-slate-900">{inst.contributors}</strong>
+                    <strong className="text-xl font-bold text-charcoal">{inst.contributors}</strong>
                   </div>
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <div className="flex items-center gap-1 text-slate-500 mb-1">
+                  <div className="p-3 rounded-lg bg-cream-light border border-cream-dark">
+                    <div className="flex items-center gap-1 text-charcoal-light mb-1">
                       <Award className="w-3 h-3" />
                       <span className="text-[10px] font-semibold uppercase">Approved</span>
                     </div>
-                    <strong className="text-xl font-bold text-slate-900">{inst.approvedItems}</strong>
+                    <strong className="text-xl font-bold text-charcoal">{inst.approvedItems}</strong>
                   </div>
-                  <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                    <div className="flex items-center gap-1 text-slate-500 mb-1">
+                  <div className="p-3 rounded-lg bg-cream-light border border-cream-dark">
+                    <div className="flex items-center gap-1 text-charcoal-light mb-1">
                       <ArrowRight className="w-3 h-3" />
                       <span className="text-[10px] font-semibold uppercase">Pending</span>
                     </div>
-                    <strong className="text-xl font-bold text-slate-900">{inst.pendingItems}</strong>
+                    <strong className="text-xl font-bold text-charcoal">{inst.pendingItems}</strong>
                   </div>
                 </div>
 
                 <div className="mb-5">
                   <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="text-slate-500">Approval rate</span>
+                    <span className="text-charcoal-light">Approval rate</span>
                     <span className="font-bold text-forest-700">{Math.round((inst.approvedItems / total) * 100)}%</span>
                   </div>
                   <Progress value={inst.approvedItems} max={total} size="sm" barClassName="bg-forest-600" />

@@ -39,30 +39,30 @@ function AchievementCard({ achievement, index }: { achievement: Achievement; ind
         <div className="flex items-start gap-4">
           <div className={clsx(
             "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 transition-colors",
-            unlocked ? "bg-forest-600 text-white" : "bg-slate-100 text-slate-400"
+            unlocked ? "bg-forest-600 text-white" : "bg-cream-light text-charcoal-light"
           )}>
             {unlocked ? <Icon className="w-6 h-6" /> : <Lock className="w-5 h-5" />}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between gap-2 mb-1">
-              <h3 className={clsx("font-bold text-slate-900", !unlocked && "text-slate-500")}>{achievement.title}</h3>
+              <h3 className={clsx("font-bold text-charcoal", !unlocked && "text-charcoal-light")}>{achievement.title}</h3>
               <Badge variant={achievement.rarity === "epic" ? "info" : achievement.rarity === "rare" ? "success" : "default"} className="capitalize">
                 {achievement.rarity}
               </Badge>
             </div>
-            <p className="text-sm text-slate-500 mb-3">{achievement.description}</p>
+            <p className="text-sm text-charcoal-light mb-3">{achievement.description}</p>
 
             <div className="flex items-center gap-3 mb-2">
               <Progress value={achievement.progress} max={achievement.total} size="sm" barClassName={unlocked ? "bg-forest-600" : "bg-gold-500"} className="flex-1" />
-              <span className="text-xs font-semibold text-slate-600 shrink-0">
+              <span className="text-xs font-semibold text-charcoal-light shrink-0">
                 {achievement.progress}/{achievement.total}
               </span>
             </div>
 
             {unlocked ? (
-              <p className="text-xs text-forest-600 font-medium">Unlocked {new Date(achievement.unlockedAt!).toLocaleDateString()}</p>
+              <p className="text-xs text-terracotta font-medium">Unlocked {new Date(achievement.unlockedAt!).toLocaleDateString()}</p>
             ) : (
-              <p className="text-xs text-slate-400">{achievement.total - achievement.progress} more to unlock</p>
+              <p className="text-xs text-charcoal-light">{achievement.total - achievement.progress} more to unlock</p>
             )}
           </div>
         </div>
@@ -117,8 +117,8 @@ export function Achievements() {
           <div className="w-14 h-14 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 mb-3">
             <Share2 className="w-6 h-6" />
           </div>
-          <h3 className="font-bold text-slate-900 mb-1">Share your impact</h3>
-          <p className="text-sm text-slate-500 mb-4">Post your achievement card to inspire other contributors.</p>
+          <h3 className="font-bold text-charcoal mb-1">Share your impact</h3>
+          <p className="text-sm text-charcoal-light mb-4">Post your achievement card to inspire other contributors.</p>
           <Button variant="secondary" size="sm" onClick={share}>
             <Share2 className="w-4 h-4" /> Copy card
           </Button>
@@ -127,8 +127,8 @@ export function Achievements() {
 
       <div className="space-y-5">
         <div className="flex items-center gap-3">
-          <Medal className="w-5 h-5 text-forest-600" />
-          <h2 className="text-lg font-bold text-slate-900">Unlocked</h2>
+          <Medal className="w-5 h-5 text-terracotta" />
+          <h2 className="text-lg font-bold text-charcoal">Unlocked</h2>
           <Badge variant="success">{unlocked.length}</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -141,7 +141,7 @@ export function Achievements() {
       <div className="space-y-5">
         <div className="flex items-center gap-3">
           <Star className="w-5 h-5 text-amber-500" />
-          <h2 className="text-lg font-bold text-slate-900">In progress</h2>
+          <h2 className="text-lg font-bold text-charcoal">In progress</h2>
           <Badge variant="warning">{inProgress.length}</Badge>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

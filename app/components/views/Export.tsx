@@ -43,8 +43,8 @@ export function Export() {
           <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 mx-auto mb-4">
             <ShieldAlert className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Access denied</h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <h2 className="text-xl font-bold text-charcoal mb-2">Access denied</h2>
+          <p className="text-sm text-charcoal-light mb-6">
             Dataset exports contain sensitive voice recordings and governed language data. This action has been logged for review.
           </p>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-medium">
@@ -83,8 +83,8 @@ export function Export() {
                     <Database className="w-6 h-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-xl text-slate-900">{release.version}</h3>
-                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                    <h3 className="font-bold text-xl text-charcoal">{release.version}</h3>
+                    <div className="flex items-center gap-1 text-xs text-charcoal-light mt-0.5">
                       <Calendar className="w-3 h-3" /> Released {release.releasedAt}
                     </div>
                   </div>
@@ -93,17 +93,17 @@ export function Export() {
               </div>
 
               <div className="grid grid-cols-3 gap-4 mb-6">
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                  <strong className="block text-2xl font-bold text-slate-900">{release.records.toLocaleString()}</strong>
-                  <span className="text-xs text-slate-500">Records</span>
+                <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+                  <strong className="block text-2xl font-bold text-charcoal">{release.records.toLocaleString()}</strong>
+                  <span className="text-xs text-charcoal-light">Records</span>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                  <strong className="block text-2xl font-bold text-slate-900">{release.hours}</strong>
-                  <span className="text-xs text-slate-500">Hours</span>
+                <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+                  <strong className="block text-2xl font-bold text-charcoal">{release.hours}</strong>
+                  <span className="text-xs text-charcoal-light">Hours</span>
                 </div>
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-                  <strong className="block text-sm truncate text-slate-900">{release.license}</strong>
-                  <span className="text-xs text-slate-500">License</span>
+                <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+                  <strong className="block text-sm truncate text-charcoal">{release.license}</strong>
+                  <span className="text-xs text-charcoal-light">License</span>
                 </div>
               </div>
 

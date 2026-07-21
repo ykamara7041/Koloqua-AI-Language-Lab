@@ -97,12 +97,12 @@ export function Sentences() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2 p-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-forest-600">
+            <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-terracotta">
               <Lightbulb className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-slate-900">Submit a new sentence</h3>
-              <p className="text-xs text-slate-500">Only original or public-domain sentences are accepted.</p>
+              <h3 className="font-bold text-charcoal">Submit a new sentence</h3>
+              <p className="text-xs text-charcoal-light">Only original or public-domain sentences are accepted.</p>
             </div>
           </div>
 
@@ -147,7 +147,7 @@ export function Sentences() {
             />
           </div>
 
-          <label className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 cursor-pointer hover:border-forest-300 transition-colors mb-4">
+          <label className="flex items-start gap-3 p-4 rounded-xl border border-cream-dark cursor-pointer hover:border-forest-300 transition-colors mb-4">
             <input
               type="checkbox"
               checked={original}
@@ -155,8 +155,8 @@ export function Sentences() {
               className="w-5 h-5 accent-forest-600 mt-0.5"
             />
             <div>
-              <strong className="block text-sm text-slate-900">This is my own original sentence</strong>
-              <p className="text-xs text-slate-500 mt-1">I wrote it myself or it is in the public domain. No copyrighted text.</p>
+              <strong className="block text-sm text-charcoal">This is my own original sentence</strong>
+              <p className="text-xs text-charcoal-light mt-1">I wrote it myself or it is in the public domain. No copyrighted text.</p>
             </div>
           </label>
           {errors.original && <p className="text-xs text-coral-600 mb-4">{errors.original}</p>}
@@ -176,10 +176,10 @@ export function Sentences() {
 
         <Card className="p-6 bg-gradient-to-br from-forest-50 to-emerald-50/50 border-forest-100">
           <div className="flex items-center gap-3 mb-4">
-            <BookOpen className="w-5 h-5 text-forest-600" />
-            <strong className="text-slate-900">Why sentences matter</strong>
+            <BookOpen className="w-5 h-5 text-terracotta" />
+            <strong className="text-charcoal">Why sentences matter</strong>
           </div>
-          <ul className="space-y-3 text-sm text-slate-600">
+          <ul className="space-y-3 text-sm text-charcoal-light">
             <li className="flex gap-2">
               <CheckCircle className="w-4 h-4 text-forest-500 shrink-0 mt-0.5" />
               More prompts mean more diverse recordings.
@@ -198,7 +198,7 @@ export function Sentences() {
 
       <div className="mt-8">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold text-slate-900">Community sentences</h2>
+          <h2 className="text-lg font-bold text-charcoal">Community sentences</h2>
           <Badge variant="success">{prompts.length} submitted</Badge>
         </div>
 
@@ -210,16 +210,16 @@ export function Sentences() {
                   <Badge variant={prompt.status === "approved" ? "success" : prompt.status === "rejected" ? "danger" : "warning"}>
                     {prompt.status}
                   </Badge>
-                  <span className="text-xs text-slate-400">{prompt.id}</span>
+                  <span className="text-xs text-charcoal-light">{prompt.id}</span>
                 </div>
 
                 <div className="space-y-2 mb-4">
-                  <p className="text-sm text-slate-500">{prompt.english}</p>
-                  <p className="text-base font-semibold text-slate-900">{prompt.koloqua}</p>
+                  <p className="text-sm text-charcoal-light">{prompt.english}</p>
+                  <p className="text-base font-semibold text-charcoal">{prompt.koloqua}</p>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500 mb-4">
-                  <span className="px-2 py-1 rounded-md bg-slate-100">{prompt.category}</span>
+                <div className="flex flex-wrap items-center gap-2 text-xs text-charcoal-light mb-4">
+                  <span className="px-2 py-1 rounded-md bg-cream-light">{prompt.category}</span>
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" /> {prompt.submittedAt}
                   </span>
@@ -227,28 +227,28 @@ export function Sentences() {
                 </div>
 
                 {prompt.sourceNote && (
-                  <p className="text-xs text-slate-500 mb-3 italic">“{prompt.sourceNote}”</p>
+                  <p className="text-xs text-charcoal-light mb-3 italic">“{prompt.sourceNote}”</p>
                 )}
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => vote(prompt.id, "up")}
-                      className="p-1.5 rounded-lg hover:bg-emerald-50 text-slate-400 hover:text-emerald-600 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-emerald-50 text-charcoal-light hover:text-emerald-600 transition-colors"
                       aria-label="Upvote"
                     >
                       <ThumbsUp className="w-4 h-4" />
                     </button>
-                    <span className="text-sm font-semibold text-slate-700 min-w-[20px] text-center">{prompt.votes}</span>
+                    <span className="text-sm font-semibold text-charcoal-light min-w-[20px] text-center">{prompt.votes}</span>
                     <button
                       onClick={() => vote(prompt.id, "down")}
-                      className="p-1.5 rounded-lg hover:bg-red-50 text-slate-400 hover:text-red-600 transition-colors"
+                      className="p-1.5 rounded-lg hover:bg-red-50 text-charcoal-light hover:text-red-600 transition-colors"
                       aria-label="Downvote"
                     >
                       <ThumbsDown className="w-4 h-4" />
                     </button>
                   </div>
-                  <span className="text-xs text-slate-400">{statusLabels[prompt.status]}</span>
+                  <span className="text-xs text-charcoal-light">{statusLabels[prompt.status]}</span>
                 </div>
               </Card>
             </motion.div>

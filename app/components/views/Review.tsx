@@ -63,9 +63,9 @@ export function Review() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1 overflow-hidden">
-          <div className="p-5 border-b border-slate-100">
+          <div className="p-5 border-b border-cream-dark">
             <span className="section-title">Review Queue</span>
-            <h3 className="text-base font-bold text-slate-900 mt-1">{reviewItems.length} items pending</h3>
+            <h3 className="text-base font-bold text-charcoal mt-1">{reviewItems.length} items pending</h3>
           </div>
           <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
             {reviewItems.map((item) => {
@@ -75,23 +75,23 @@ export function Review() {
                   key={item.id}
                   onClick={() => setSelected(item)}
                   className={clsx(
-                    "w-full p-4 text-left transition-all hover:bg-slate-50",
+                    "w-full p-4 text-left transition-all hover:bg-cream-light",
                     selected.id === item.id && "bg-forest-50/70 border-l-4 border-forest-500"
                   )}
                 >
                   <div className="flex items-start gap-3">
                     <div className={clsx(
                       "w-9 h-9 rounded-full flex items-center justify-center shrink-0",
-                      itemStatus === "Approved" ? "bg-emerald-100 text-emerald-700" : itemStatus === "Rejected" ? "bg-red-100 text-red-700" : "bg-slate-100 text-slate-500"
+                      itemStatus === "Approved" ? "bg-emerald-100 text-emerald-700" : itemStatus === "Rejected" ? "bg-red-100 text-red-700" : "bg-cream-light text-charcoal-light"
                     )}>
                       {itemStatus === "Approved" ? <CheckCircle className="w-4 h-4" /> : itemStatus === "Rejected" ? <XCircle className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <span className="text-xs text-slate-500">{item.id}</span>
+                        <span className="text-xs text-charcoal-light">{item.id}</span>
                         <span className="text-xs font-bold text-forest-700">{item.quality}%</span>
                       </div>
-                      <strong className="block text-sm text-slate-900 truncate">{item.text}</strong>
+                      <strong className="block text-sm text-charcoal truncate">{item.text}</strong>
                       <div className="flex flex-wrap gap-1.5 mt-1.5">
                         {item.flags && <Badge variant="warning">{flagLabels[item.flags]}</Badge>}
                         {itemStatus && <Badge variant={itemStatus === "Approved" ? "success" : itemStatus === "Rejected" ? "danger" : "warning"}>{itemStatus}</Badge>}
@@ -108,26 +108,26 @@ export function Review() {
           <div className="flex items-start justify-between mb-6">
             <div>
               <span className="section-title">{selected.id}</span>
-              <h2 className="text-3xl font-bold text-slate-900 mt-1 font-display">{selected.text}</h2>
+              <h2 className="text-3xl font-bold text-charcoal mt-1 font-display">{selected.text}</h2>
             </div>
             <Badge variant={selected.flags ? "warning" : "success"}>{selected.flags ? "Needs attention" : "Quality good"}</Badge>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Standard English</span>
-              <p className="text-lg text-slate-900 mt-1">{selected.translation}</p>
+            <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+              <span className="text-xs font-bold uppercase tracking-wider text-charcoal-light">Standard English</span>
+              <p className="text-lg text-charcoal mt-1">{selected.translation}</p>
             </div>
-            <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Speaker & Meta</span>
+            <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
+              <span className="text-xs font-bold uppercase tracking-wider text-charcoal-light">Speaker & Meta</span>
               <div className="flex items-center justify-between mt-2">
                 <div>
-                  <strong className="block text-sm text-slate-900">{selected.speaker}</strong>
-                  <span className="text-xs text-slate-500">{new Date(selected.submittedAt).toLocaleDateString()}</span>
+                  <strong className="block text-sm text-charcoal">{selected.speaker}</strong>
+                  <span className="text-xs text-charcoal-light">{new Date(selected.submittedAt).toLocaleDateString()}</span>
                 </div>
                 <div className="text-right">
-                  <strong className="block text-sm text-slate-900">{selected.duration}s</strong>
-                  <span className="text-xs text-slate-500">Duration</span>
+                  <strong className="block text-sm text-charcoal">{selected.duration}s</strong>
+                  <span className="text-xs text-charcoal-light">Duration</span>
                 </div>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function Review() {
                     />
                   ))}
                 </div>
-                <div className="flex items-center justify-between text-xs text-slate-500 mt-1">
+                <div className="flex items-center justify-between text-xs text-charcoal-light mt-1">
                   <span>0:0{currentTime.toFixed(0)}</span>
                   <span>0:0{selected.duration}</span>
                 </div>

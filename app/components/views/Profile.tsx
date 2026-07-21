@@ -30,7 +30,7 @@ export function Profile() {
   const [pin, setPin] = useState("");
 
   if (!user) {
-    return <p className="text-slate-500">Please sign in to view your profile.</p>;
+    return <p className="text-charcoal-light">Please sign in to view your profile.</p>;
   }
 
   const savePin = () => {
@@ -61,23 +61,23 @@ export function Profile() {
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-forest-500 to-forest-700 text-white text-2xl font-bold flex items-center justify-center mb-4 shadow-lg">
               {user.name.split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase()}
             </div>
-            <h3 className="font-bold text-xl text-slate-900">{user.name}</h3>
-            <p className="text-sm text-slate-500">{user.email}</p>
+            <h3 className="font-bold text-xl text-charcoal">{user.name}</h3>
+            <p className="text-sm text-charcoal-light">{user.email}</p>
             <Badge variant="success" className="mt-3">
               <ShieldCheck className="w-3 h-3" /> {user.role}
             </Badge>
-            <div className="w-full border-t border-slate-100 mt-6 pt-6 text-left">
+            <div className="w-full border-t border-cream-dark mt-6 pt-6 text-left">
               <div className="flex items-center justify-between text-sm mb-2">
-                <span className="text-slate-500">Joined</span>
-                <span className="font-medium text-slate-900">{user.joinedAt}</span>
+                <span className="text-charcoal-light">Joined</span>
+                <span className="font-medium text-charcoal">{user.joinedAt}</span>
               </div>
               <div className="flex items-center justify-between text-sm mb-2">
-                <span className="text-slate-500">Contributions</span>
-                <span className="font-medium text-slate-900">86</span>
+                <span className="text-charcoal-light">Contributions</span>
+                <span className="font-medium text-charcoal">86</span>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-500">Approval rate</span>
-                <span className="font-medium text-slate-900">91%</span>
+                <span className="text-charcoal-light">Approval rate</span>
+                <span className="font-medium text-charcoal">91%</span>
               </div>
             </div>
           </div>
@@ -85,7 +85,7 @@ export function Profile() {
 
         <div className="lg:col-span-2 space-y-5">
           <Card className="p-6">
-            <h3 className="font-bold text-lg text-slate-900 mb-5">Personal information</h3>
+            <h3 className="font-bold text-lg text-charcoal mb-5">Personal information</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Input
                 label="Full name"
@@ -120,16 +120,16 @@ export function Profile() {
 
           <Card className="p-6">
             <div className="flex items-center gap-3 mb-5">
-              <Shield className="w-5 h-5 text-forest-600" />
-              <h3 className="font-bold text-lg text-slate-900">Security settings</h3>
+              <Shield className="w-5 h-5 text-terracotta" />
+              <h3 className="font-bold text-lg text-charcoal">Security settings</h3>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-slate-500" />
-                    <span className="text-sm font-medium text-slate-900">Auto-lock on idle</span>
+                    <Clock className="w-4 h-4 text-charcoal-light" />
+                    <span className="text-sm font-medium text-charcoal">Auto-lock on idle</span>
                   </div>
                   <input
                     type="checkbox"
@@ -138,22 +138,22 @@ export function Profile() {
                     className="w-5 h-5 accent-forest-600"
                   />
                 </div>
-                <p className="text-xs text-slate-500 mt-2">Automatically sign out after 10 minutes of inactivity.</p>
+                <p className="text-xs text-charcoal-light mt-2">Automatically sign out after 10 minutes of inactivity.</p>
               </div>
 
-              <div className="p-4 rounded-xl bg-slate-50 border border-slate-100">
+              <div className="p-4 rounded-xl bg-cream-light border border-cream-dark">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-2">
-                    <Smartphone className="w-4 h-4 text-slate-500" />
-                    <span className="text-sm font-medium text-slate-900">Email verification</span>
+                    <Smartphone className="w-4 h-4 text-charcoal-light" />
+                    <span className="text-sm font-medium text-charcoal">Email verification</span>
                   </div>
                   <input type="checkbox" checked disabled className="w-5 h-5 accent-forest-600" />
                 </div>
-                <p className="text-xs text-slate-500 mt-2">Required for every sign-in.</p>
+                <p className="text-xs text-charcoal-light mt-2">Required for every sign-in.</p>
               </div>
             </div>
 
-            <div className="border-t border-slate-100 pt-5">
+            <div className="border-t border-cream-dark pt-5">
               <div className="flex flex-col sm:flex-row items-start sm:items-end gap-3">
                 <Input
                   label="Payment PIN"
@@ -167,7 +167,7 @@ export function Profile() {
                 />
                 <Button variant="secondary" onClick={savePin}>Set PIN</Button>
               </div>
-              <p className="text-xs text-slate-500 mt-2">This PIN is required for every payout request.</p>
+              <p className="text-xs text-charcoal-light mt-2">This PIN is required for every payout request.</p>
             </div>
 
             <div className="flex flex-wrap gap-3 mt-6">
@@ -181,23 +181,23 @@ export function Profile() {
           </Card>
 
           <Card className="p-6">
-            <h3 className="font-bold text-lg text-slate-900 mb-5">Achievements</h3>
+            <h3 className="font-bold text-lg text-charcoal mb-5">Achievements</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {achievements.map((ach) => (
-                <div key={ach.id} className={`p-4 rounded-xl border ${ach.unlockedAt ? "bg-emerald-50/50 border-emerald-100" : "bg-slate-50 border-slate-100"}`}>
+                <div key={ach.id} className={`p-4 rounded-xl border ${ach.unlockedAt ? "bg-emerald-50/50 border-emerald-100" : "bg-cream-light border-cream-dark"}`}>
                   <div className="flex items-start gap-3">
-                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${ach.unlockedAt ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-500"}`}>
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${ach.unlockedAt ? "bg-emerald-500 text-white" : "bg-cream-dark text-charcoal-light"}`}>
                       {iconMap[ach.icon] || <Trophy className="w-4 h-4" />}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between">
-                        <strong className="text-sm text-slate-900">{ach.title}</strong>
+                        <strong className="text-sm text-charcoal">{ach.title}</strong>
                         {ach.unlockedAt && <Badge variant="success">Unlocked</Badge>}
                       </div>
-                      <p className="text-xs text-slate-500 mt-1">{ach.description}</p>
+                      <p className="text-xs text-charcoal-light mt-1">{ach.description}</p>
                       <div className="mt-3">
                         <div className="flex justify-between text-xs mb-1">
-                          <span className="text-slate-500">{ach.progress}/{ach.total}</span>
+                          <span className="text-charcoal-light">{ach.progress}/{ach.total}</span>
                           <span className="font-medium text-forest-700">{Math.round((ach.progress / ach.total) * 100)}%</span>
                         </div>
                         <Progress value={ach.progress} max={ach.total} size="sm" barClassName="bg-forest-600" />

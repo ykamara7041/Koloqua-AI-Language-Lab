@@ -33,13 +33,13 @@ export function Campaigns() {
                 <div className="flex items-center gap-3">
                   <div className={clsx(
                     "w-11 h-11 rounded-xl flex items-center justify-center",
-                    campaign.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-slate-100 text-slate-500"
+                    campaign.status === "active" ? "bg-emerald-100 text-emerald-700" : "bg-cream-light text-charcoal-light"
                   )}>
                     <Target className="w-5 h-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-lg text-slate-900">{campaign.name}</h3>
-                    <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5">
+                    <h3 className="font-bold text-lg text-charcoal">{campaign.name}</h3>
+                    <div className="flex items-center gap-2 text-xs text-charcoal-light mt-0.5">
                       <Calendar className="w-3 h-3" /> Deadline: {campaign.deadline}
                     </div>
                   </div>
@@ -50,33 +50,33 @@ export function Campaigns() {
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-5">
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <div className="flex items-center gap-1 text-slate-500 mb-1">
+                <div className="p-3 rounded-lg bg-cream-light border border-cream-dark">
+                  <div className="flex items-center gap-1 text-charcoal-light mb-1">
                     <Users className="w-3 h-3" />
                     <span className="text-[10px] font-semibold uppercase">Collected</span>
                   </div>
-                  <strong className="text-xl font-bold text-slate-900">{campaign.collected}</strong>
-                  <span className="text-xs text-slate-500"> / {campaign.target}</span>
+                  <strong className="text-xl font-bold text-charcoal">{campaign.collected}</strong>
+                  <span className="text-xs text-charcoal-light"> / {campaign.target}</span>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-50 border border-slate-100">
-                  <div className="flex items-center gap-1 text-slate-500 mb-1">
+                <div className="p-3 rounded-lg bg-cream-light border border-cream-dark">
+                  <div className="flex items-center gap-1 text-charcoal-light mb-1">
                     <Wallet className="w-3 h-3" />
                     <span className="text-[10px] font-semibold uppercase">Reward/item</span>
                   </div>
-                  <strong className="text-xl font-bold text-slate-900">L${campaign.rewardPerItem}</strong>
+                  <strong className="text-xl font-bold text-charcoal">L${campaign.rewardPerItem}</strong>
                 </div>
               </div>
 
               <div className="mb-5">
                 <div className="flex justify-between text-sm font-semibold mb-2">
-                  <span className="text-slate-500">Progress</span>
+                  <span className="text-charcoal-light">Progress</span>
                   <span className="text-forest-700">{Math.round((campaign.collected / campaign.target) * 100)}%</span>
                 </div>
                 <Progress value={campaign.collected} max={campaign.target} size="md" barClassName={campaign.status === "active" ? "bg-forest-600" : "bg-gold-500"} />
               </div>
 
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-500">Sponsored by {campaign.sponsor}</span>
+                <span className="text-xs text-charcoal-light">Sponsored by {campaign.sponsor}</span>
                 <Button variant="secondary" size="sm" onClick={() => toast.info(`${campaign.name} status toggled (demo).`)}>
                   {campaign.status === "active" ? (
                     <> <PauseCircle className="w-4 h-4" /> Pause</>

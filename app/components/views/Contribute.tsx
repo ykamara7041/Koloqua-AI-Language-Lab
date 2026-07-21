@@ -102,9 +102,9 @@ export function Contribute() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-1 overflow-hidden">
-          <div className="p-5 border-b border-slate-100">
+          <div className="p-5 border-b border-cream-dark">
             <span className="section-title">Prepared Sentences</span>
-            <h3 className="text-base font-bold text-slate-900 mt-1">Choose a task</h3>
+            <h3 className="text-base font-bold text-charcoal mt-1">Choose a task</h3>
           </div>
           <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
             {tasks.map((task) => (
@@ -112,7 +112,7 @@ export function Contribute() {
                 key={task.id}
                 onClick={() => setActiveTask(task)}
                 className={clsx(
-                  "w-full p-4 text-left transition-all hover:bg-slate-50",
+                  "w-full p-4 text-left transition-all hover:bg-cream-light",
                   activeTask.id === task.id && "bg-forest-50/70 border-l-4 border-forest-500"
                 )}
               >
@@ -120,7 +120,7 @@ export function Contribute() {
                   <Badge variant={task.category === "Health" ? "info" : task.category === "Market" ? "warning" : "success"}>{task.category}</Badge>
                   <span className="text-xs font-bold text-forest-700">L${task.reward}</span>
                 </div>
-                <strong className="block text-sm text-slate-900 mb-2">{task.english}</strong>
+                <strong className="block text-sm text-charcoal mb-2">{task.english}</strong>
                 <Progress value={task.done} max={task.total} size="sm" barClassName="bg-forest-600" />
               </button>
             ))}
@@ -130,15 +130,15 @@ export function Contribute() {
         <Card className="lg:col-span-2 p-6">
           <div className="mb-6">
             <span className="section-title">English Prompt</span>
-            <h2 className="text-2xl font-bold text-slate-900 mt-1 font-display">{activeTask.english}</h2>
-            <p className="text-sm text-slate-500 mt-1">Category: {activeTask.category} · Difficulty: {activeTask.difficulty} · Reward: L${activeTask.reward}</p>
+            <h2 className="text-2xl font-bold text-charcoal mt-1 font-display">{activeTask.english}</h2>
+            <p className="text-sm text-charcoal-light mt-1">Category: {activeTask.category} · Difficulty: {activeTask.difficulty} · Reward: L${activeTask.reward}</p>
           </div>
 
           <Card className="p-6 mb-6 bg-gradient-to-br from-forest-50 to-emerald-50/50 border-forest-100">
             <div className="flex flex-col items-center">
               <AudioWaveform recording={recording} />
-              <div className="text-4xl font-bold text-slate-900 font-mono mt-3">{formatTime(seconds)}</div>
-              <p className="text-xs text-slate-500 mt-1">{recording ? "Recording in progress..." : audioUrl ? "Recording complete" : "Ready to record"}</p>
+              <div className="text-4xl font-bold text-charcoal font-mono mt-3">{formatTime(seconds)}</div>
+              <p className="text-xs text-charcoal-light mt-1">{recording ? "Recording in progress..." : audioUrl ? "Recording complete" : "Ready to record"}</p>
 
               <div className="flex items-center gap-4 mt-6">
                 <button
@@ -152,7 +152,7 @@ export function Contribute() {
                   {recording ? <Square className="w-6 h-6 fill-current" /> : <Mic className="w-6 h-6" />}
                 </button>
                 {audioUrl && (
-                  <button onClick={reset} className="w-12 h-12 rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors" aria-label="Re-record">
+                  <button onClick={reset} className="w-12 h-12 rounded-full bg-white border border-cream-dark flex items-center justify-center text-charcoal-light hover:text-charcoal transition-colors" aria-label="Re-record">
                     <RotateCcw className="w-5 h-5" />
                   </button>
                 )}
@@ -161,7 +161,7 @@ export function Contribute() {
           </Card>
 
           {audioUrl && (
-            <div className="mb-6 p-4 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-4">
+            <div className="mb-6 p-4 rounded-xl bg-cream-light border border-cream-dark flex items-center gap-4">
               <button className="w-10 h-10 rounded-full bg-forest-700 text-white flex items-center justify-center">
                 <Play className="w-4 h-4 fill-current ml-0.5" />
               </button>
@@ -198,11 +198,11 @@ export function Contribute() {
             />
           </div>
 
-          <label className="flex items-start gap-3 p-4 rounded-xl border border-slate-200 cursor-pointer hover:border-forest-300 transition-colors mb-6">
+          <label className="flex items-start gap-3 p-4 rounded-xl border border-cream-dark cursor-pointer hover:border-forest-300 transition-colors mb-6">
             <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="w-5 h-5 accent-forest-600 mt-0.5" />
             <div>
-              <strong className="block text-sm text-slate-900">I agree to contribute my voice</strong>
-              <p className="text-xs text-slate-500 mt-1">My recording may be reviewed and, if approved, included in a licensed open dataset. I can revoke consent later.</p>
+              <strong className="block text-sm text-charcoal">I agree to contribute my voice</strong>
+              <p className="text-xs text-charcoal-light mt-1">My recording may be reviewed and, if approved, included in a licensed open dataset. I can revoke consent later.</p>
             </div>
           </label>
           {errors.consent && <p className="text-xs text-coral-600 mb-4">{errors.consent}</p>}

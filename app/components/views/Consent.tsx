@@ -41,8 +41,8 @@ export function Consent() {
               <FileCheck className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-bold text-lg text-slate-900">Consent statement v1.2</h3>
-              <p className="text-xs text-slate-500">Last updated: July 2026</p>
+              <h3 className="font-bold text-lg text-charcoal">Consent statement v1.2</h3>
+              <p className="text-xs text-charcoal-light">Last updated: July 2026</p>
             </div>
           </div>
 
@@ -53,9 +53,9 @@ export function Consent() {
               { icon: UserX, text: "I can revoke consent at any time, and my identity data is stored separately from language data." },
               { icon: Users, text: "If I am under 18, a parent or guardian must also provide consent." },
             ].map((item, i) => (
-              <div key={i} className="flex gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
-                <item.icon className="w-5 h-5 text-forest-600 shrink-0 mt-0.5" />
-                <p className="text-sm text-slate-600 leading-relaxed">{item.text}</p>
+              <div key={i} className="flex gap-3 p-4 rounded-xl bg-cream-light border border-cream-dark">
+                <item.icon className="w-5 h-5 text-terracotta shrink-0 mt-0.5" />
+                <p className="text-sm text-charcoal-light leading-relaxed">{item.text}</p>
               </div>
             ))}
           </div>
@@ -90,12 +90,12 @@ export function Consent() {
             <span className="section-title">Consent History</span>
             <div className="mt-4 space-y-4">
               {consentRecords.map((rec) => (
-                <div key={rec.id} className="border-b border-slate-100 last:border-0 pb-4 last:pb-0">
+                <div key={rec.id} className="border-b border-cream-dark last:border-0 pb-4 last:pb-0">
                   <div className="flex items-center justify-between mb-1">
-                    <strong className="text-sm text-slate-900">{rec.version}</strong>
+                    <strong className="text-sm text-charcoal">{rec.version}</strong>
                     <Badge variant="success">Active</Badge>
                   </div>
-                  <time className="text-xs text-slate-500" dateTime={rec.agreedAt}>
+                  <time className="text-xs text-charcoal-light" dateTime={rec.agreedAt}>
                     {new Date(rec.agreedAt).toLocaleDateString()}
                   </time>
                   {rec.guardian && <p className="text-xs text-amber-700 mt-1">{rec.guardian}</p>}
@@ -110,8 +110,8 @@ export function Consent() {
                 <Download className="w-5 h-5" />
               </div>
               <div>
-                <strong className="block text-sm text-slate-900">Download consent form</strong>
-                <span className="text-xs text-slate-500">PDF · 124 KB</span>
+                <strong className="block text-sm text-charcoal">Download consent form</strong>
+                <span className="text-xs text-charcoal-light">PDF · 124 KB</span>
               </div>
             </div>
             <Button variant="secondary" size="sm" className="w-full" onClick={() => toast.success("Consent form downloaded.")}>

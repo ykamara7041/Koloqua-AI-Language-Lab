@@ -41,8 +41,8 @@ export function Audit() {
           <div className="w-16 h-16 rounded-2xl bg-red-50 flex items-center justify-center text-red-600 mx-auto mb-4">
             <ShieldAlert className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2">Access denied</h2>
-          <p className="text-sm text-slate-500 mb-6">
+          <h2 className="text-xl font-bold text-charcoal mb-2">Access denied</h2>
+          <p className="text-sm text-charcoal-light mb-6">
             The audit log contains sensitive governance information. This action has been logged for review.
           </p>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-50 border border-amber-100 text-amber-700 text-xs font-medium">
@@ -62,14 +62,14 @@ export function Audit() {
       />
 
       <Card className="overflow-hidden">
-        <div className="p-5 border-b border-slate-100 flex flex-wrap items-center justify-between gap-3">
+        <div className="p-5 border-b border-cream-dark flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-forest-50 flex items-center justify-center text-forest-700">
               <ScrollText className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="font-semibold text-slate-900">{auditEvents.length} events logged</h3>
-              <p className="text-xs text-slate-500">Last 30 days</p>
+              <h3 className="font-semibold text-charcoal">{auditEvents.length} events logged</h3>
+              <p className="text-xs text-charcoal-light">Last 30 days</p>
             </div>
           </div>
           <div className="flex gap-2">
@@ -84,27 +84,27 @@ export function Audit() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50">
+            <thead className="bg-cream-light">
               <tr>
-                <th className="px-5 py-3 font-semibold text-xs text-slate-500 uppercase tracking-wider">Event</th>
-                <th className="px-5 py-3 font-semibold text-xs text-slate-500 uppercase tracking-wider">Actor</th>
-                <th className="px-5 py-3 font-semibold text-xs text-slate-500 uppercase tracking-wider">Target</th>
-                <th className="px-5 py-3 font-semibold text-xs text-slate-500 uppercase tracking-wider">Time</th>
-                <th className="px-5 py-3 font-semibold text-xs text-slate-500 uppercase tracking-wider">Risk</th>
+                <th className="px-5 py-3 font-semibold text-xs text-charcoal-light uppercase tracking-wider">Event</th>
+                <th className="px-5 py-3 font-semibold text-xs text-charcoal-light uppercase tracking-wider">Actor</th>
+                <th className="px-5 py-3 font-semibold text-xs text-charcoal-light uppercase tracking-wider">Target</th>
+                <th className="px-5 py-3 font-semibold text-xs text-charcoal-light uppercase tracking-wider">Time</th>
+                <th className="px-5 py-3 font-semibold text-xs text-charcoal-light uppercase tracking-wider">Risk</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {auditEvents.map((event) => (
-                <tr key={event.id} className="hover:bg-slate-50 transition-colors">
+                <tr key={event.id} className="hover:bg-cream-light transition-colors">
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-2">
-                      <ScrollText className="w-4 h-4 text-slate-400" />
-                      <span className="font-medium text-slate-900">{event.action}</span>
+                      <ScrollText className="w-4 h-4 text-charcoal-light" />
+                      <span className="font-medium text-charcoal">{event.action}</span>
                     </div>
                   </td>
-                  <td className="px-5 py-4 text-slate-600">{event.actor}</td>
-                  <td className="px-5 py-4 font-mono text-xs text-slate-500">{event.target}</td>
-                  <td className="px-5 py-4 text-slate-500">
+                  <td className="px-5 py-4 text-charcoal-light">{event.actor}</td>
+                  <td className="px-5 py-4 font-mono text-xs text-charcoal-light">{event.target}</td>
+                  <td className="px-5 py-4 text-charcoal-light">
                     <time dateTime={event.timestamp}>{new Date(event.timestamp).toLocaleString()}</time>
                   </td>
                   <td className="px-5 py-4">
